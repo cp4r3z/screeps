@@ -2,3 +2,9 @@ Tutorial 1
 Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Harvester1' );
 
 Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Harvester2' );
+
+Tutorial 2
+Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Upgrader1' );
+
+Tutorial 4
+Game.creeps['Harvester1'].suicide();
