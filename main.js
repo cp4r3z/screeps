@@ -1,3 +1,7 @@
+/**
+ * This space intentionally left blank
+ */
+
 const CONFIG = require('config');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
