@@ -1,7 +1,16 @@
+Admin
+---
+From cmd (not PowerShell):
+Create a Symlink to the GitHub repo
+mklink /d GitHub C:\Users\PAREZ\Documents\GitHub\screeps
+
+
 Tutorial 1
 Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Harvester1' );
+Game.creeps['Harvester1'].memory.role = 'harvester';
 
 Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Harvester2' );
+Game.creeps['Harvester2'].memory.role = 'harvester';
 
 Tutorial 2
 Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Upgrader1' );
@@ -12,5 +21,35 @@ Game.creeps['Harvester1'].memory.role = 'harvester';
 Game.creeps['Upgrader1'].memory.role = 'upgrader';
 
 
+
+
 Tutorial 4
 Game.creeps['Harvester1'].suicide();
+
+
+Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Harvester1', { memory: { role: 'harvester' } });
+Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Harvester2', { memory: { role: 'harvester' } });
+Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Upgrader1', { memory: { role: 'upgrader' } } );
+Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Builder1', { memory: { role: 'builder' } });
+
+Other
+---
+Game.spawns['Spawn1'].room.createConstructionSite(23, 22, STRUCTURE_TOWER);
+
+// Add an NPC bot to the map
+bots.spawn('simplebot', 'W3N1');
+
+// Send a server message to all connected users
+system.sendServerMessage("OHAI");
+
+// Generate a new room and add it to the world
+map.generateRoom("E0N3", {sources: 4, terrainType: 2});
+
+// View user's data by his username
+storage.db['users'].findOne({username: "User"});
+
+// Show all creeps in a room
+storage.db['rooms.objects'].find({$and: [{room: 'W1N1'}, {type: 'creep'}]});
+
+// Remove an object by its id
+storage.db['rooms.objects'].removeWhere({_id: "abcdef"});
