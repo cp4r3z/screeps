@@ -2,7 +2,7 @@
  * This space intentionally left blank
  */
 
-const CONFIG = require('config');
+//const CONFIG = require('config');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
