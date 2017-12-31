@@ -1,5 +1,5 @@
 /**
- * This space intentionally left blank.
+ * This space intentionally left blank
  */
 
 const CONFIG = require('config');
