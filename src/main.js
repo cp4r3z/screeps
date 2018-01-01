@@ -10,9 +10,10 @@ var roleBuilder = require('role.builder');
 module.exports.loop = function() {
 
     const spawnName = 'Spawn1', // eventually this will have to be independent...
+        // all these need to get pushed into a config file. UGLY
         SPAWN_PROPS = {
             harvesters: {
-                min: 3
+                min: 1
             },
             upgraders: {
                 min: 2
@@ -20,6 +21,13 @@ module.exports.loop = function() {
             builders: {
                 min: 1
             },
+        },
+        CREEP_PROPS = {
+            parts: {
+                carry_fast: [WORK, CARRY, MOVE, MOVE],
+                carry_big: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+            }
+
         };
     // var tower = Game.getObjectById('TOWER_ID');
     // if(tower) {
@@ -59,15 +67,15 @@ module.exports.loop = function() {
         if (harvesters.length < SPAWN_PROPS.harvesters.min) {
             newName = 'Harvester' + Game.time;
             console.log('Attempting to spawn new harvester: ' + newName);
-            Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'harvester' } });
+            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
         } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
             newName = 'Upgrader' + Game.time;
             console.log('Attempting to spawn new upgrader: ' + newName);
-            Game.spawns[spawnName].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName, { memory: { role: 'upgrader' } });
+            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'upgrader' } });
         } else if (builders.length < SPAWN_PROPS.builders.min) {
             newName = 'Builder' + Game.time;
             console.log('Attempting to spawn new builder: ' + newName);
-            Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'builder' } });
+            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
         }
     }
 
