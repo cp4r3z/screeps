@@ -12,13 +12,13 @@ module.exports.loop = function() {
     const spawnName = 'Spawn1', // eventually this will have to be independent...
         SPAWN_PROPS = {
             harvesters: {
-                min: 2
+                min: 3
             },
             upgraders: {
-                min: 4
+                min: 2
             },
             builders: {
-                min: 4
+                min: 1
             },
         };
     // var tower = Game.getObjectById('TOWER_ID');
@@ -63,8 +63,8 @@ module.exports.loop = function() {
         } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
             newName = 'Upgrader' + Game.time;
             console.log('Attempting to spawn new upgrader: ' + newName);
-            Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'upgrader' } });
-        } else if (upgraders.length < SPAWN_PROPS.builders.min) {
+            Game.spawns[spawnName].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE], newName, { memory: { role: 'upgrader' } });
+        } else if (builders.length < SPAWN_PROPS.builders.min) {
             newName = 'Builder' + Game.time;
             console.log('Attempting to spawn new builder: ' + newName);
             Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'builder' } });
