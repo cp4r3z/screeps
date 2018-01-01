@@ -46,7 +46,7 @@ module.exports.loop = function() {
     if (Game.spawns[spawnName].spawning) {
         var spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
         Game.spawns[spawnName].room.visual.text(
-            'spawning' + spawningCreep.memory.role,
+            'Spawning a new ' + spawningCreep.memory.role,
             Game.spawns[spawnName].pos.x + 1,
             Game.spawns[spawnName].pos.y, { align: 'left', opacity: 0.8 });
     } else {
@@ -78,6 +78,9 @@ module.exports.loop = function() {
         }
         if (creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
+        }
+        if (creep.memory.role == 'builder') {
+            roleBuilder.run(creep);
         }
     }
 }
