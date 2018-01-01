@@ -15,7 +15,10 @@ module.exports.loop = function() {
                 min: 2
             },
             upgraders: {
-                min: 1
+                min: 2
+            },
+            builders: {
+                min: 4
             },
         };
     // var tower = Game.getObjectById('TOWER_ID');
@@ -50,6 +53,7 @@ module.exports.loop = function() {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var newName;
 
         if (harvesters.length < SPAWN_PROPS.harvesters.min) {
@@ -60,6 +64,10 @@ module.exports.loop = function() {
             newName = 'Upgrader' + Game.time;
             console.log('Attempting to spawn new upgrader: ' + newName);
             Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'upgrader' } });
+        } else if (upgraders.length < SPAWN_PROPS.builders.min) {
+            newName = 'Builder' + Game.time;
+            console.log('Attempting to spawn new builder: ' + newName);
+            Game.spawns[spawnName].spawnCreep([WORK, CARRY, MOVE], newName, { memory: { role: 'builder' } });
         }
     }
 
