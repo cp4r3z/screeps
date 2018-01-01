@@ -15,7 +15,7 @@ module.exports.loop = function() {
                 min: 2
             },
             upgraders: {
-                min: 2
+                min: 4
             },
             builders: {
                 min: 4

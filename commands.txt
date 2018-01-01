@@ -34,7 +34,13 @@ Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Builder1', { memory: { ro
 
 Other
 ---
-Game.spawns['Spawn1'].room.createConstructionSite(23, 22, STRUCTURE_TOWER);
+Game.spawns['Spawn1'].room.createConstructionSite(39, 25, STRUCTURE_TOWER);
+
+Game.spawns['Spawn1'].room.createConstructionSite(24, 32, STRUCTURE_CONTAINER);
+Game.spawns['Spawn1'].room.createConstructionSite(24, 30, STRUCTURE_CONTAINER);
+Game.spawns['Spawn1'].room.createConstructionSite(24, 28, STRUCTURE_CONTAINER);
+Game.spawns['Spawn1'].room.createConstructionSite(24, 26, STRUCTURE_CONTAINER);
+Game.spawns['Spawn1'].room.createConstructionSite(24, 24, STRUCTURE_CONTAINER);
 
 // Add an NPC bot to the map
 bots.spawn('simplebot', 'W3N1');
