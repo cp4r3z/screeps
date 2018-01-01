@@ -63,7 +63,7 @@ module.exports.loop = function() {
         } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
             newName = 'Upgrader' + Game.time;
             console.log('Attempting to spawn new upgrader: ' + newName);
-            Game.spawns[spawnName].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE], newName, { memory: { role: 'upgrader' } });
+            Game.spawns[spawnName].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], newName, { memory: { role: 'upgrader' } });
         } else if (builders.length < SPAWN_PROPS.builders.min) {
             newName = 'Builder' + Game.time;
             console.log('Attempting to spawn new builder: ' + newName);
