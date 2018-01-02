@@ -67,7 +67,7 @@ module.exports.loop = function() {
         if (harvesters.length < SPAWN_PROPS.harvesters.min) {
             newName = 'Harvester' + Game.time;
             console.log('Attempting to spawn new harvester: ' + newName);
-            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
+            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'harvester' } });
         } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
             newName = 'Upgrader' + Game.time;
             console.log('Attempting to spawn new upgrader: ' + newName);
