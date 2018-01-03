@@ -21,11 +21,16 @@ module.exports.loop = function() {
             builders: {
                 min: 1
             },
+            hunters: {
+                min: 2
+            }
         },
         CREEP_PROPS = {
+            // odd that these things aren't arrays of strings... shrug
             parts: {
                 carry_fast: [WORK, CARRY, MOVE, MOVE],
-                carry_big: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+                carry_big: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+                kill: [TOUGH, ATTACK, MOVE]
             }
 
         };
@@ -62,9 +67,21 @@ module.exports.loop = function() {
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+        var hunters = _.filter(Game.creeps, (creep) => creep.memory.role == 'hunter');
         var newName;
-
-        if (harvesters.length < SPAWN_PROPS.harvesters.min) {
+        
+        var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
+        if(hostiles.length > 0) {
+            // Hey we're under attack. Yay.
+            var username = hostiles[0].owner.username;
+            Game.notify(`User ${username} spotted in room ${roomName}`);
+            if (hunters.length < SPAWN_PROPS.hunters.min) {
+                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.killer, newName, { memory: { role: 'hunter' } });
+            }
+            // var towers = Game.rooms[roomName].find(
+            //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+            // towers.forEach(tower => tower.attack(hostiles[0]));
+        } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
             newName = 'Harvester' + Game.time;
             console.log('Attempting to spawn new harvester: ' + newName);
             Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'harvester' } });
