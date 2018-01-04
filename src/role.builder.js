@@ -21,9 +21,18 @@ var roleBuilder = {
             }
         }
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            // find nearest source (with energy)
+            // use findPath to sort
+            var sources = creep.room.find(FIND_SOURCES, {
+                filter: (source) => {
+                    return source.energy > 0;
+                }
+            });            
+            var closestSource = sources.sort((sourceA, sourceB) => creep.room.findPath(creep.pos, sourceA.pos) - creep.room.findPath(creep.pos, sourceB.pos))[0];
+
+            if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
+                //console.log(`role.upgrader: ${creep.name} moving to ${closestSource}.`)
+                creep.moveTo(closestSource, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
     }
