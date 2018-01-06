@@ -13,13 +13,13 @@ module.exports.loop = function() {
         // all these need to get pushed into a config file. UGLY
         SPAWN_PROPS = {
             harvesters: {
-                min: 4
+                min: 3
             },
             upgraders: {
                 min: 2
             },
             builders: {
-                min: 3
+                min: 4
             },
             hunters: {
                 min: 2
