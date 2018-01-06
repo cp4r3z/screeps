@@ -26,13 +26,15 @@ var roleBuilder = {
             let path = Game.spawns['Spawn1'].room.findPath(Game.spawns['Spawn1'].pos, sources[0].pos, {
                 ignoreCreeps: true
             });
-            
+
             for (let pathPos of path) {
                 //create construction site (road)
                 const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
-                console.log(sites);
-                //if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES)[0]){}
-                Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
+                if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length !== 0) {
+                    Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
+                    console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
+                }
+
             }
 
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
