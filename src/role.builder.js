@@ -36,12 +36,19 @@ var roleBuilder = {
                 }
             }
 
-            const sources = [].concat(Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
-                Game.spawns['Spawn1'].room.controller); //let's just start here.
-            // add also STRUCTURE_EXTENSION
+            const sources = [].concat(
+                Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
+                Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_EXTENSION ||
+                            structure.structureType == STRUCTURE_CONTAINER);
+                    }
+                })
+            );
 
             for (let source of sources) {
                 buildRoad(Game.spawns['Spawn1'].pos, source.pos);
+                buildRoad(Game.spawns['Spawn1'].room.controller.pos, source.pos);
             }
 
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
