@@ -22,19 +22,20 @@ var roleBuilder = {
             //const roadNodes = [].concat(Game.spawns['Spawn1'].room.find(FIND_MY_SPAWNS),);
             const sources = Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE); //let's just start here.
 
+            for (let source of sources) {
+                let path = Game.spawns['Spawn1'].room.findPath(Game.spawns['Spawn1'].pos, source.pos, {
+                    ignoreCreeps: true
+                });
 
-            let path = Game.spawns['Spawn1'].room.findPath(Game.spawns['Spawn1'].pos, sources[0].pos, {
-                ignoreCreeps: true
-            });
+                for (let pathPos of path) {
+                    //create construction site (road)
+                    const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
+                    if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length === 0) {
+                        Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
+                        console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
+                    }
 
-            for (let pathPos of path) {
-                //create construction site (road)
-                const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
-                if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length === 0) {
-                    Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
-                    console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
                 }
-
             }
 
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
