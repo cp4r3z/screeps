@@ -20,7 +20,9 @@ var roleBuilder = {
             // Containers
             // 
             //const roadNodes = [].concat(Game.spawns['Spawn1'].room.find(FIND_MY_SPAWNS),);
-            const sources = Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE); //let's just start here.
+            const sources = [].concat(Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
+                Game.spawns['Spawn1'].room.controller); //let's just start here.
+                // add also STRUCTURE_EXTENSION
 
             for (let source of sources) {
                 let path = Game.spawns['Spawn1'].room.findPath(Game.spawns['Spawn1'].pos, source.pos, {
