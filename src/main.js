@@ -19,7 +19,7 @@ module.exports.loop = function() {
                 min: 2
             },
             builders: {
-                min: 1
+                min: 3
             },
             hunters: {
                 min: 2
