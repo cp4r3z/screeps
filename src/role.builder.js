@@ -30,7 +30,7 @@ var roleBuilder = {
             for (let pathPos of path) {
                 //create construction site (road)
                 const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
-                if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length !== 0) {
+                if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length === 0) {
                     Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
                     console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
                 }
@@ -41,6 +41,20 @@ var roleBuilder = {
             if (targets.length) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    console.log(`Moving to construction site.`);
+                }
+            }
+            else {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: object => object.hits < object.hitsMax
+                });
+
+                targets.sort((a, b) => a.hits - b.hits);
+
+                if (targets.length > 0) {
+                    if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(targets[0]);
+                    }
                 }
             }
         }
