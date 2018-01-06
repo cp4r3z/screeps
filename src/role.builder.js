@@ -30,11 +30,10 @@ var roleBuilder = {
                 for (let pathPos of path) {
                     //create construction site (road)
                     const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
-                    if (Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES).length === 0) {
+                    if (sites.length === 0) {
                         Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
-                        console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
+                        //console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
                     }
-
                 }
             }
 
