@@ -20,12 +20,9 @@ var roleBuilder = {
             // Containers
             // 
             //const roadNodes = [].concat(Game.spawns['Spawn1'].room.find(FIND_MY_SPAWNS),);
-            const sources = [].concat(Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
-                Game.spawns['Spawn1'].room.controller); //let's just start here.
-                // add also STRUCTURE_EXTENSION
 
-            for (let source of sources) {
-                let path = Game.spawns['Spawn1'].room.findPath(Game.spawns['Spawn1'].pos, source.pos, {
+            function buildRoad(pos1, pos2) {
+                let path = Game.spawns['Spawn1'].room.findPath(pos1, pos2, {
                     ignoreCreeps: true
                 });
 
@@ -37,6 +34,14 @@ var roleBuilder = {
                         //console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
                     }
                 }
+            }
+
+            const sources = [].concat(Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
+                Game.spawns['Spawn1'].room.controller); //let's just start here.
+            // add also STRUCTURE_EXTENSION
+
+            for (let source of sources) {
+                buildRoad(Game.spawns['Spawn1'].pos, source.pos);
             }
 
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
