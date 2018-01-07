@@ -23,7 +23,11 @@ var roleUpgrader = {
 
             // this shit needs to be a module or something.
             let sources =
-                Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE).concat(
+                Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE)
+                
+                // Okay, I'm not sure you can harvest from extensions! Ha! Maybe we'll have to drop energy.
+                /*
+                .concat(
                     Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
                         filter: (structure) => {
                             return (structure.structureType == STRUCTURE_EXTENSION) && structure.energy > 0; //||
@@ -31,7 +35,10 @@ var roleUpgrader = {
                         }
                     })
                 );
+                */
             //console.log(sources);
+            
+            // ok, this is not efficient anymore. use the built in method instead
             const closestSource = sources.sort((sourceA, sourceB) => {
                 return creep.room.findPath(creep.pos, sourceA.pos).length - creep.room.findPath(creep.pos, sourceB.pos).length;
             })[0];
