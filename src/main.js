@@ -40,7 +40,8 @@ module.exports.loop = function() {
             // odd that these things aren't arrays of strings... shrug
             parts: {
                 carry_fast: [WORK, CARRY, MOVE, MOVE], // = 100 + 50*3 = 250
-                carry_big: [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], // = 100*3 + 50*9 = 750
+                carry_big: [WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], // = 100*1 + 50*6 = 400
+                // hey you know what? Maybe the upgraders don't need WORK.
                 kill: [TOUGH, ATTACK, MOVE, MOVE]
             }
 
@@ -84,7 +85,7 @@ module.exports.loop = function() {
         var newName;
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-        if (!Game.spawns[spawnName].spawning) {
+        if (!Game.spawns[spawnName].spawning && totalEnergy == totalCapacity) {
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
@@ -98,7 +99,7 @@ module.exports.loop = function() {
                 // towers.forEach(tower => tower.attack(hostiles[0]));
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 //calculate spawn energy WITH the extensions
-                if (Game.spawns[spawnName].energy >= 850) {
+                if (Game.spawns[spawnName].energy >= 400) {
                     newName = 'HarvesterHeavy' + Game.time;
                     console.log('Attempting to spawn new big harvester: ' + newName);
                     Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
@@ -116,6 +117,8 @@ module.exports.loop = function() {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
+            } else {
+                console.warn('What a waste.');
             }
         }
     }
