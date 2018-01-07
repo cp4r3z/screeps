@@ -15,12 +15,12 @@ module.exports.loop = function() {
         spawnEnergy = Game.spawns[spawnName].energy,
         extensions = Game.spawns[spawnName].room.find(FIND_MY_STRUCTURES, {
             filter: (extension) => {
-                return extension.structureType == STRUCTURE_EXTENSION && extension.energy > 0;
+                return extension.structureType == STRUCTURE_EXTENSION;
             }
         }),
-        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + parseInt(extension.energy), 0),
+        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + extension.energy, 0),
         spawnCapacity = Game.spawns[spawnName].energyCapacity,
-        totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + parseInt(extension.energyCapacity), 0),
+        totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + extension.energyCapacity, 0),
         // all these need to get pushed into a config file. UGLY
         SPAWN_PROPS = {
             harvesters: {
@@ -40,7 +40,7 @@ module.exports.loop = function() {
             // odd that these things aren't arrays of strings... shrug
             parts: {
                 carry_fast: [WORK, CARRY, MOVE, MOVE], // = 100 + 50*3 = 250
-                carry_big: [WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE], // = 100*1 + 50*6 = 400
+                carry_big: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], // = 100*2 + 50*8 = 600
                 // hey you know what? Maybe the upgraders don't need WORK.
                 kill: [TOUGH, ATTACK, MOVE, MOVE]
             }
@@ -99,7 +99,7 @@ module.exports.loop = function() {
                 // towers.forEach(tower => tower.attack(hostiles[0]));
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 //calculate spawn energy WITH the extensions
-                if (Game.spawns[spawnName].energy >= 400) {
+                if (Game.spawns[spawnName].energy >= 600) {
                     newName = 'HarvesterHeavy' + Game.time;
                     console.log('Attempting to spawn new big harvester: ' + newName);
                     Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
