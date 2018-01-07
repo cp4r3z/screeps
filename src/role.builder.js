@@ -62,7 +62,7 @@ var roleBuilder = {
             }
             else {
                 // Repair
-                const targets = creep.room.find(FIND_STRUCTURES, {
+                let targets = creep.room.find(FIND_STRUCTURES, {
                     filter: object => object.hits < object.hitsMax
                 });
 
