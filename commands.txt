@@ -31,6 +31,8 @@ Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, M
 Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Harvester2', { memory: { role: 'harvester' } });
 Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Upgrader1', { memory: { role: 'upgrader' } } );
 Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], 'Builder1', { memory: { role: 'builder' } });
+Game.spawns['Spawn1'].spawnCreep([CLAIM, MOVE], 'Scout1', { memory: { role: 'scout', dest: 'E13N47' } });
+E13N46
 
 [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
 

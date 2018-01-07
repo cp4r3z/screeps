@@ -2,10 +2,11 @@
  * This space intentionally left blank.
  */
 
-const CONFIG = require('config');
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
+const CONFIG = require('config'),
+    roleHarvester = require('role.harvester'),
+    roleUpgrader = require('role.upgrader'),
+    roleBuilder = require('role.builder'),
+    roleScout = require('role.scout');
 
 module.exports.loop = function() {
 
@@ -123,6 +124,9 @@ module.exports.loop = function() {
         }
         if (creep.memory.role == 'killer') {
             roleKiller.run(creep);
+        }
+        if (creep.memory.role == 'scout') {
+            roleScout.run(creep);
         }
     }
 }
