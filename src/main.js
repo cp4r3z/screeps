@@ -18,7 +18,9 @@ module.exports.loop = function() {
                 return extension.structureType == STRUCTURE_EXTENSION && extension.energy > 0;
             }
         }),
-        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + parseInt(extension.energy)),
+        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + parseInt(extension.energy), 0),
+        spawnCapacity = Game.spawns[spawnName].energyCapacity,
+        totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + parseInt(extension.energyCapacity), 0),
         // all these need to get pushed into a config file. UGLY
         SPAWN_PROPS = {
             harvesters: {
@@ -44,7 +46,7 @@ module.exports.loop = function() {
 
         };
 
-    //console.log(`Total Energy: ${totalEnergy}`);
+    //console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
     var tower = Game.getObjectById('5a51aac196005e55af510071');
     if (tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -82,37 +84,39 @@ module.exports.loop = function() {
         var newName;
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-        if (hostiles.length > 0) {
-            // Hey we're under attack. Yay.
-            var username = hostiles[0].owner.username;
-            Game.notify(`User ${username} spotted in room ${roomName}`);
-            if (hunters.length < SPAWN_PROPS.hunters.min) {
-                newName = 'Killer' + Game.time;
-                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.kill, newName, { memory: { role: 'hunter' } });
-            }
-            // var towers = Game.rooms[roomName].find(
-            //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-            // towers.forEach(tower => tower.attack(hostiles[0]));
-        } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
-            //calculate spawn energy WITH the extensions
-            if (Game.spawns[spawnName].energy >= 850) {
-                newName = 'HarvesterHeavy' + Game.time;
-                console.log('Attempting to spawn new big harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
-            } else {
-                newName = 'Harvester' + Game.time;
-                console.log('Attempting to spawn new harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'harvester' } });
-            }
+        if (!Game.spawns[spawnName].spawning) {
+            if (hostiles.length > 0) {
+                // Hey we're under attack. Yay.
+                var username = hostiles[0].owner.username;
+                Game.notify(`User ${username} spotted in room ${roomName}`);
+                if (hunters.length < SPAWN_PROPS.hunters.min) {
+                    newName = 'Killer' + Game.time;
+                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.kill, newName, { memory: { role: 'hunter' } });
+                }
+                // var towers = Game.rooms[roomName].find(
+                //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                // towers.forEach(tower => tower.attack(hostiles[0]));
+            } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
+                //calculate spawn energy WITH the extensions
+                if (Game.spawns[spawnName].energy >= 850) {
+                    newName = 'HarvesterHeavy' + Game.time;
+                    console.log('Attempting to spawn new big harvester: ' + newName);
+                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
+                } else {
+                    newName = 'Harvester' + Game.time;
+                    console.log('Attempting to spawn new harvester: ' + newName);
+                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'harvester' } });
+                }
 
-        } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
-            newName = 'Upgrader' + Game.time;
-            console.log('Attempting to spawn new upgrader: ' + newName);
-            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'upgrader' } });
-        } else if (builders.length < SPAWN_PROPS.builders.min) {
-            newName = 'Builder' + Game.time;
-            console.log('Attempting to spawn new builder: ' + newName);
-            Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
+            } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
+                newName = 'Upgrader' + Game.time;
+                console.log('Attempting to spawn new upgrader: ' + newName);
+                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'upgrader' } });
+            } else if (builders.length < SPAWN_PROPS.builders.min) {
+                newName = 'Builder' + Game.time;
+                console.log('Attempting to spawn new builder: ' + newName);
+                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
+            }
         }
     }
 
