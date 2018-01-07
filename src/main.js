@@ -85,7 +85,7 @@ module.exports.loop = function() {
             // towers.forEach(tower => tower.attack(hostiles[0]));
         }
         else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
-
+            //calculate spawn energy WITH the extensions
             if (Game.spawns[spawnName].energy >= 850) {
                 newName = 'HarvesterHeavy' + Game.time;
                 console.log('Attempting to spawn new big harvester: ' + newName);

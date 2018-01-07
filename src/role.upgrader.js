@@ -26,6 +26,7 @@ var roleUpgrader = {
                 Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE)
                 
                 // Okay, I'm not sure you can harvest from extensions! Ha! Maybe we'll have to drop energy.
+                // Oh, SO, there's thie "withdraw" command that we should look into. Again, this needs to be a util.
                 /*
                 .concat(
                     Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
