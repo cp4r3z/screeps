@@ -1,3 +1,5 @@
+var roleHarvester = require('role.harvester');
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -71,6 +73,11 @@ var roleBuilder = {
                     if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets[0]);
                     }
+                }
+                else {
+                    //Nothing to do nowhere to go? Go harvest something.
+                    creep.say('harrrvest');
+                    roleHarvester.run(creep);
                 }
             }
         }
