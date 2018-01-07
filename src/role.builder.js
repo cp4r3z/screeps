@@ -45,28 +45,29 @@ var roleBuilder = {
                     }
                 })
             );
-// This gets out of control.
-/*
-            for (let source of sources) {
-                buildRoad(Game.spawns['Spawn1'].pos, source.pos);
-                buildRoad(Game.spawns['Spawn1'].room.controller.pos, source.pos);
-            }
-*/
-            var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if (targets.length) {
-                if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
-                    console.log(`Moving to construction site.`);
+            // This gets out of control.
+            /*
+                        for (let source of sources) {
+                            buildRoad(Game.spawns['Spawn1'].pos, source.pos);
+                            buildRoad(Game.spawns['Spawn1'].room.controller.pos, source.pos);
+                        }
+            */
+            //var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+            const target = creep.room.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            if (target) {
+                if (creep.build(target) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+                    //console.log(`Moving to construction site.`);
                 }
             }
             else {
-                targets = creep.room.find(FIND_STRUCTURES, {
+                // Repair
+                const targets = creep.room.find(FIND_STRUCTURES, {
                     filter: object => object.hits < object.hitsMax
                 });
 
-                targets.sort((a, b) => a.hits - b.hits);
-
                 if (targets.length > 0) {
+                    targets = targets.sort((a, b) => a.hits - b.hits);
                     if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(targets[0]);
                     }
