@@ -14,9 +14,11 @@ module.exports.loop = function() {
 
         spawnEnergy = Game.spawns[spawnName].energy,
         extensions = Game.spawns[spawnName].room.find(FIND_MY_STRUCTURES, {
-            filter: { structureType: STRUCTURE_EXTENSION }
+            filter: (extension) => {
+                return extension.structureType == STRUCTURE_EXTENSION && extension.energy > 0;
+            }
         }),
-        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + extension.energy),
+        totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + parseInt(extension.energy)),
         // all these need to get pushed into a config file. UGLY
         SPAWN_PROPS = {
             harvesters: {
