@@ -42,7 +42,7 @@ module.exports.loop = function() {
 
         };
 
-    console.log(`Total Energy: ${totalEnergy}`);
+    //console.log(`Total Energy: ${totalEnergy}`);
     var tower = Game.getObjectById('5a51aac196005e55af510071');
     if (tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
