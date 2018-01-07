@@ -26,12 +26,12 @@ var roleUpgrader = {
 
             // Okay, I'm not sure you can harvest from extensions! Ha! Maybe we'll have to drop energy.
             // Oh, SO, there's thie "withdraw" command that we should look into. Again, this needs to be a util.
+            // Ok, trying to use containers instead. This should be good.
 
             .concat(
                 Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION) && structure.energy > 0; //||
-                        //structure.structureType == STRUCTURE_CONTAINER);
+                        return (structure.structureType == STRUCTURE_CONTAINER) && structure.store[RESOURCE_ENERGY] > 0;
                     }
                 })
             );
@@ -43,7 +43,7 @@ var roleUpgrader = {
                 return creep.room.findPath(creep.pos, sourceA.pos).length - creep.room.findPath(creep.pos, sourceB.pos).length;
             })[0];
             //console.log(closestSource);
-            if (closestSource.structureType == STRUCTURE_EXTENSION) {
+            if (closestSource.structureType == STRUCTURE_CONTAINER) {
                 if (creep.withdraw(closestSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestSource, { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
