@@ -20,27 +20,28 @@ var roleHarvester = {
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
-        }
-        else {
-            const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        } else {
+            // Start by filling extensions and spawns
+            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    //A el nido de raton. Arreglalo!
-                    return (
-                            (structure.structureType == STRUCTURE_EXTENSION ||
-                                structure.structureType == STRUCTURE_SPAWN ||
-                                structure.structureType == STRUCTURE_TOWER) &&
-                            structure.energy < structure.energyCapacity) ||
-                        (structure.structureType == STRUCTURE_CONTAINER &&
-                            structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) && structure.energy < structure.energyCapacity;
                 }
             });
 
+            // Then, if that's all done, fill other stuff
+            if (!target) {
+                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity) ||
+                            (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < structure.storeCapacity);
+                    }
+                });
+            }
             if (target) {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
-            }
-            else {
+            } else {
                 //upgrade
                 creep.say('upppgrade');
                 roleUpgrader.run(creep);
