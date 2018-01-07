@@ -118,7 +118,7 @@ module.exports.loop = function() {
                 console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
             } else {
-                console.warn('What a waste.');
+                console.log('What a waste.');
             }
         }
     }
