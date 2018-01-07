@@ -38,6 +38,7 @@ var roleHarvester = {
             }
             else {
                 //upgrade
+                creep.say('hstr: no target');
                 roleUpgrader.run(creep);
             }
         }
