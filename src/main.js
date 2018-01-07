@@ -85,7 +85,7 @@ module.exports.loop = function() {
         var newName;
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-        if (!Game.spawns[spawnName].spawning && totalEnergy == totalCapacity) {
+        if (!Game.spawns[spawnName].spawning && totalEnergy >= 600) {
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
@@ -99,7 +99,7 @@ module.exports.loop = function() {
                 // towers.forEach(tower => tower.attack(hostiles[0]));
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 //calculate spawn energy WITH the extensions
-                if (Game.spawns[spawnName].energy >= 600) {
+                if (totalEnergy >= 600) {
                     newName = 'HarvesterHeavy' + Game.time;
                     console.log('Attempting to spawn new big harvester: ' + newName);
                     Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
