@@ -33,7 +33,7 @@ var roleUpgrader = {
                 );
             //console.log(sources);
             const closestSource = sources.sort((sourceA, sourceB) => {
-                return creep.room.findPath(creep.pos, sourceA.pos) - creep.room.findPath(creep.pos, sourceB.pos);
+                return creep.room.findPath(creep.pos, sourceA.pos).length - creep.room.findPath(creep.pos, sourceB.pos).length;
             })[0];
             //console.log(closestSource);
             if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
