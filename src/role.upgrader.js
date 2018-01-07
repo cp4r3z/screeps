@@ -26,13 +26,15 @@ var roleUpgrader = {
                 Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
                 Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
-                        return structure.structureType == STRUCTURE_EXTENSION; //||
+                        return (structure.structureType == STRUCTURE_EXTENSION) && structure.energy > 0; //||
                         //structure.structureType == STRUCTURE_CONTAINER);
                     }
                 })
             );
 
-            var closestSource = sources.sort((sourceA, sourceB) => creep.room.findPath(creep.pos, sourceA.pos) - creep.room.findPath(creep.pos, sourceB.pos))[0];
+            const closestSource = sources.sort((sourceA, sourceB) => {
+                return creep.room.findPath(creep.pos, sourceA.pos) - creep.room.findPath(creep.pos, sourceB.pos);
+            })[0];
 
             if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
                 //console.log(`role.upgrader: ${creep.name} moving to ${closestSource}.`)
