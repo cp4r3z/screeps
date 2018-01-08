@@ -33,14 +33,12 @@ module.exports = {
                     t: TOUGH
                 };
                 let list = [];
+                let cost = 0;
                 for (const part in description) {
                     list = list.concat(Array(description[part]).fill(PARTS[part]));
+                    cost += BODYPART_COST[part] * description[part];
                 }
-                let cost = 0;
-                for (let part in list) {
-                    cost += BODYPART_COST[part];
-                }
-                console.log(`Cost: ${cost}`);
+                console.log(`Creep Cost: ${cost}`);
                 return list;
             }
         }
