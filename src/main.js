@@ -86,7 +86,7 @@ module.exports.loop = function() {
         var newName;
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-        if (!Game.spawns[spawnName].spawning && totalEnergy >= 600) {
+        if (!Game.spawns[spawnName].spawning) {
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
@@ -126,7 +126,7 @@ module.exports.loop = function() {
                 console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast), newName, { memory: { role: 'builder' } });
             } else {
-                console.log('What a waste.');
+                //console.log('What a waste.');
             }
         }
     }
