@@ -48,8 +48,6 @@ module.exports.loop = function() {
             }
 
         };
-    console.log(UTILS.creep.parts.list({ m: 2, w: 1, c: 1 }));
-
     console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
     var tower = Game.getObjectById('5a51aac196005e55af510071');
     if (tower) {
