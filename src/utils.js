@@ -22,19 +22,19 @@ module.exports = {
                 CLAIM
                 TOUGH
                 */
-                const PARTS = [
-                    { m: MOVE },
-                    { w: WORK },
-                    { c: CARRY },
-                    { a: ATTACK },
-                    { r: RANGED_ATTACK },
-                    { h: HEAL },
-                    { cl: CLAIM },
-                    { t: TOUGH }
-                ];
+                const PARTS = {
+                    m: MOVE,
+                    w: WORK,
+                    c: CARRY,
+                    a: ATTACK,
+                    r: RANGED_ATTACK,
+                    h: HEAL,
+                    cl: CLAIM,
+                    t: TOUGH
+                };
                 let list = [];
                 for (const part in description) {
-                    list = list.concat(Array(description[part]));
+                    list = list.concat(Array(description[part]).fill(PARTS[part]));
                 }
                 let cost = 0;
                 for (let part in list) {
