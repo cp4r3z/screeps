@@ -28,7 +28,7 @@ module.exports.loop = function() {
                 min: 4
             },
             upgraders: {
-                min: 3
+                min: 4
             },
             builders: {
                 min: 6
@@ -40,10 +40,11 @@ module.exports.loop = function() {
         CREEP_PROPS = {
             // odd that these things aren't arrays of strings... shrug
             parts: {
-                carry_fast: [WORK, CARRY, MOVE, MOVE], // = 100 + 50*3 = 250
-                carry_big: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], // = 100*2 + 50*8 = 600
+                carry_fast: { m: 2, w: 1, c: 1 }, // = 100 + 50*3 = 250
+                carry_big: { m: 4, w: 2, c: 6 }, // = 100*2 + 50*8 = 600
                 // hey you know what? Maybe the upgraders don't need WORK.
-                kill: [TOUGH, ATTACK, MOVE, MOVE]
+                mc_big: { m: 8, c: 8 },
+                kill: { m: 2, t: 1, a: 1 }
             }
 
         };
@@ -94,7 +95,7 @@ module.exports.loop = function() {
                 Game.notify(`User ${username} spotted in room ${roomName}`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.kill, newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.kill), newName, { memory: { role: 'hunter' } });
                 }
                 // var towers = Game.rooms[roomName].find(
                 //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
@@ -104,21 +105,28 @@ module.exports.loop = function() {
                 if (totalEnergy >= 600) {
                     newName = 'HarvesterHeavy' + Game.time;
                     console.log('Attempting to spawn new big harvester: ' + newName);
-                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_big, newName, { memory: { role: 'harvester' } });
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_big), newName, { memory: { role: 'harvester' } });
                 } else {
                     newName = 'Harvester' + Game.time;
                     console.log('Attempting to spawn new harvester: ' + newName);
-                    Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'harvester' } });
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast), newName, { memory: { role: 'harvester' } });
                 }
 
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
-                newName = 'Upgrader' + Game.time;
-                console.log('Attempting to spawn new upgrader: ' + newName);
-                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'upgrader' } });
+                if (totalEnergy >= 800) {
+                    newName = 'UpgraderHeavy' + Game.time;
+                    console.log('Attempting to spawn new big upgrader: ' + newName);
+                    // This assumes that the upgrader will do no work!
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.mc_big), newName, { memory: { role: 'upgrader' } });
+                } else {
+                    newName = 'Upgrader' + Game.time;
+                    console.log('Attempting to spawn new upgrader: ' + newName);
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast), newName, { memory: { role: 'upgrader' } });
+                }
             } else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
-                Game.spawns[spawnName].spawnCreep(CREEP_PROPS.parts.carry_fast, newName, { memory: { role: 'builder' } });
+                Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast), newName, { memory: { role: 'builder' } });
             } else {
                 console.log('What a waste.');
             }
