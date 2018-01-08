@@ -48,7 +48,9 @@ module.exports.loop = function() {
             }
 
         };
-    console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
+    
+    // Uncomment this to see the total energy available for spawning. I need a debug module.
+    //console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
     var tower = Game.getObjectById('5a51aac196005e55af510071');
     if (tower) {
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
