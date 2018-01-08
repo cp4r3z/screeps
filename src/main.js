@@ -3,6 +3,7 @@
  */
 
 const CONFIG = require('config'),
+    UTILS = require('utils'),
     roleHarvester = require('role.harvester'),
     roleUpgrader = require('role.upgrader'),
     roleBuilder = require('role.builder'),
@@ -40,12 +41,13 @@ module.exports.loop = function() {
             // odd that these things aren't arrays of strings... shrug
             parts: {
                 carry_fast: [WORK, CARRY, MOVE, MOVE], // = 100 + 50*3 = 250
-                carry_big: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], // = 100*2 + 50*8 = 600
+                carry_big: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], // = 100*2 + 50*8 = 600
                 // hey you know what? Maybe the upgraders don't need WORK.
                 kill: [TOUGH, ATTACK, MOVE, MOVE]
             }
 
         };
+    console.log(UTILS.creep.parts.list({ m: 2, w: 1, c: 1 }));
 
     console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
     var tower = Game.getObjectById('5a51aac196005e55af510071');
