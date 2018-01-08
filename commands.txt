@@ -36,6 +36,8 @@ E13N46
 
 [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
 
+Game.creeps['UpgraderHeavy2423359'].move(LEFT);
+
 Other
 ---
 Game.spawns['Spawn1'].room.createConstructionSite(39, 25, STRUCTURE_TOWER);

@@ -42,8 +42,8 @@ module.exports.loop = function() {
             parts: {
                 carry_fast: { m: 2, w: 1, c: 1 }, // = 100 + 50*3 = 250
                 carry_big: { m: 4, w: 2, c: 6 }, // = 100*2 + 50*8 = 600
-                // hey you know what? Maybe the upgraders don't need WORK.
-                mc_big: { m: 8, c: 8 },
+                upgrade_big: { m: 7, w: 1, c: 7 }, // = 100*1 + 50*14 = 800
+                // hey you know what? Maybe the upgraders don't need WORK. OH YES THEY DO!
                 kill: { m: 2, t: 1, a: 1 }
             }
 
@@ -117,7 +117,7 @@ module.exports.loop = function() {
                     newName = 'UpgraderHeavy' + Game.time;
                     console.log('Attempting to spawn new big upgrader: ' + newName);
                     // This assumes that the upgrader will do no work!
-                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.mc_big), newName, { memory: { role: 'upgrader' } });
+                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.upgrade_big), newName, { memory: { role: 'upgrader' } });
                 } else {
                     newName = 'Upgrader' + Game.time;
                     console.log('Attempting to spawn new upgrader: ' + newName);
