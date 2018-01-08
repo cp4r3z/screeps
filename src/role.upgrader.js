@@ -29,7 +29,7 @@ var roleUpgrader = {
             // Ok, trying to use containers instead. This should be good.
 
             .concat(
-                Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
+                Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER) && structure.store[RESOURCE_ENERGY] > 0;
                     }
