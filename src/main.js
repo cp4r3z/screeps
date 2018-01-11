@@ -136,6 +136,7 @@ module.exports.loop = function() {
             }
             else {
                 //console.log('What a waste.');
+                //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
             }
         }
     }
