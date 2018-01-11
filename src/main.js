@@ -3,7 +3,7 @@
  */
 
 const CONFIG = require('./config'),
-    UTILS = require('./utils'),
+    utils = require('./utils'),
     roleHarvester = require('./role.harvester'),
     roleUpgrader = require('./role.upgrader'),
     roleBuilder = require('./role.builder'),
@@ -68,7 +68,7 @@ module.exports.loop = function() {
         }
     }
 
-    for (var name in Memory.creeps) {
+    for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
@@ -84,27 +84,34 @@ module.exports.loop = function() {
     }
     else {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
-        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-        var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-        var hunters = _.filter(Game.creeps, (creep) => creep.memory.role == 'hunter');
+        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'),
+            upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'),
+            builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'),
+            hunters = _.filter(Game.creeps, (creep) => creep.memory.role == 'hunter');
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
 
-        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0,
-            isAtCapacity = totalEnergy == totalCapacity,
+        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0;
+        if (isWipedOut) {
+            // Do not consider the extensions, as they probably won't be filled.
+            if (!totalEnergy > spawnCapacity) {
+                totalCapacity = spawnCapacity;
+            }
+        }
+        const isAtCapacity = totalEnergy >= totalCapacity,
             isSpawning = !Game.spawns[spawnName].spawning,
             shouldSpawn = isWipedOut || (!isSpawning && isAtCapacity);
 
         if (shouldSpawn) {
-            var newName;
+            let newName;
+
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
                 Game.notify(`User ${username} spotted in room ${roomName}`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.kill), newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.list(CREEP_PROPS.parts.kill).list, newName, { memory: { role: 'hunter' } });
                 }
                 // var towers = Game.rooms[roomName].find(
                 //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
@@ -113,26 +120,19 @@ module.exports.loop = function() {
             else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(UTILS.creep.getHeavy(totalEnergy).list, newName, { memory: { role: 'harvester' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.getWorker(totalEnergy).list, newName, { memory: { role: 'harvester' } });
 
             }
             else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
-                if (totalEnergy >= 800) {
-                    newName = 'UpgraderHeavy' + Game.time;
-                    console.log('Attempting to spawn new big upgrader: ' + newName);
-                    // This assumes that the upgrader will do no work!
-                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.upgrade_big).list, newName, { memory: { role: 'upgrader' } });
-                }
-                else {
-                    newName = 'Upgrader' + Game.time;
-                    console.log('Attempting to spawn new upgrader: ' + newName);
-                    Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast).list, newName, { memory: { role: 'upgrader' } });
-                }
+                newName = 'Upgrader' + Game.time;
+                console.log('Attempting to spawn new upgrader: ' + newName);
+                Game.spawns[spawnName].spawnCreep(utils.creep.getWorker(totalEnergy).list, newName, { memory: { role: 'upgrader' } });
+
             }
             else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
-                Game.spawns[spawnName].spawnCreep(UTILS.creep.parts.list(CREEP_PROPS.parts.carry_fast).list, newName, { memory: { role: 'builder' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.getWorker(totalEnergy).list, newName, { memory: { role: 'builder' } });
             }
             else {
                 //console.log('What a waste.');
@@ -141,8 +141,8 @@ module.exports.loop = function() {
         }
     }
 
-    for (var name in Game.creeps) {
-        var creep = Game.creeps[name];
+    for (const name in Game.creeps) {
+        const creep = Game.creeps[name];
         if (creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }
