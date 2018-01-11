@@ -99,7 +99,7 @@ module.exports.loop = function() {
             }
         }
         const isAtCapacity = totalEnergy >= totalCapacity,
-            isSpawning = !Game.spawns[spawnName].spawning,
+            isSpawning = Game.spawns[spawnName].spawning,
             shouldSpawn = isWipedOut || (!isSpawning && isAtCapacity);
 
         if (shouldSpawn) {

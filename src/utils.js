@@ -9,16 +9,16 @@ const PARTS = {
     t: TOUGH
 };
 
-const BODYPART_COST = {
-    "move": 50,
-    "work": 100,
-    "attack": 80,
-    "carry": 50,
-    "heal": 250,
-    "ranged_attack": 150,
-    "tough": 10,
-    "claim": 600
-};
+// const BODYPART_COST = {
+//     "move": 50,
+//     "work": 100,
+//     "attack": 80,
+//     "carry": 50,
+//     "heal": 250,
+//     "ranged_attack": 150,
+//     "tough": 10,
+//     "claim": 600
+// };
 
 module.exports = {
     creep: {
@@ -80,7 +80,12 @@ module.exports = {
                     cost
                 };
             },
-            getHeavy(energyCapacity) {
+            getWorker(energyCapacity) {
+                const baseDesc = {
+                    m: 2,
+                    w: 1,
+                    c: 1
+                };
                 let energyUsed = 0,
                     description = {
                         m: 0,
@@ -91,11 +96,6 @@ module.exports = {
                         h: 0,
                         cl: 0,
                         t: 0
-                    },
-                    baseDesc = {
-                        m: 2,
-                        w: 1,
-                        c: 1
                     },
                     adding = true;
                 while (adding) {
