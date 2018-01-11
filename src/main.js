@@ -88,10 +88,16 @@ module.exports.loop = function() {
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
         var hunters = _.filter(Game.creeps, (creep) => creep.memory.role == 'hunter');
-        var newName;
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-        if (!Game.spawns[spawnName].spawning && totalEnergy == totalCapacity) {
+
+        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0,
+            isAtCapacity = totalEnergy == totalCapacity,
+            isSpawning = !Game.spawns[spawnName].spawning,
+            shouldSpawn = isWipedOut || (!isSpawning && isAtCapacity);
+
+        if (shouldSpawn) {
+            var newName;
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
