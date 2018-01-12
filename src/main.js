@@ -22,10 +22,10 @@ module.exports.loop = function() {
             }
         }),
         totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + extension.energy, 0),
-        spawnCapacity = Game.spawns[spawnName].energyCapacity,
-        totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + extension.energyCapacity, 0),
-        // all these need to get pushed into a config file. UGLY
-        SPAWN_PROPS = {
+        spawnCapacity = Game.spawns[spawnName].energyCapacity;
+    let totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + extension.energyCapacity, 0);
+    // all these need to get pushed into a config file. UGLY
+    const SPAWN_PROPS = {
             harvesters: {
                 min: 4
             },
@@ -81,8 +81,7 @@ module.exports.loop = function() {
             'Spawning a new ' + spawningCreep.memory.role,
             Game.spawns[spawnName].pos.x + 1,
             Game.spawns[spawnName].pos.y, { align: 'left', opacity: 0.8 });
-    }
-    else {
+    } else {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
         const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'),
             upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'),
@@ -91,7 +90,7 @@ module.exports.loop = function() {
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
 
-        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0;
+        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0 || hunters.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
             if (!totalEnergy > spawnCapacity) {
@@ -108,33 +107,29 @@ module.exports.loop = function() {
             if (hostiles.length > 0) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
-                Game.notify(`User ${username} spotted in room ${roomName}`);
+                Game.notify(`UNDER ATTACK`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.list(CREEP_PROPS.parts.kill).list, newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'hunter' } });
                 }
                 // var towers = Game.rooms[roomName].find(
                 //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
                 // towers.forEach(tower => tower.attack(hostiles[0]));
-            }
-            else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
+            } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'harvester' } });
 
-            }
-            else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
+            } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'upgrader' } });
 
-            }
-            else if (builders.length < SPAWN_PROPS.builders.min) {
+            } else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'builder' } });
-            }
-            else {
+            } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
             }

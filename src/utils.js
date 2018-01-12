@@ -87,10 +87,11 @@ module.exports = {
                     c: 1
                 };
                 let energyUsed = 0,
+                    // Start with a minimum creep    
                     description = {
-                        m: 0,
-                        w: 0,
-                        c: 0,
+                        m: 2,
+                        w: 1,
+                        c: 1,
                         a: 0,
                         r: 0,
                         h: 0,
@@ -98,16 +99,18 @@ module.exports = {
                         t: 0
                     },
                     adding = true;
-                while (adding) {
+                // Ok, there has to be a better way to do this.
+                    while (adding) {
                     let added = false;
                     for (const part in baseDesc) {
-                        energyUsed += BODYPART_COST[PARTS[part]];
-                        if (energyUsed <= energyCapacity) {
-                            description[part]++;
-                            added = true;
-                        }
-                        else {
-                            energyUsed -= BODYPART_COST[PARTS[part]];
+                        for (let i = 0; i < baseDesc[part]; i++) {
+                            energyUsed += BODYPART_COST[PARTS[part]];
+                            if (energyUsed <= energyCapacity) {
+                                description[part]++;
+                                added = true;
+                            } else {
+                                energyUsed -= BODYPART_COST[PARTS[part]];
+                            }
                         }
                     }
                     if (!added) adding = false;
