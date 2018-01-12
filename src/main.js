@@ -112,9 +112,10 @@ module.exports.loop = function() {
                     newName = 'Killer' + Game.time;
                     Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'hunter' } });
                 }
-                // var towers = Game.rooms[roomName].find(
-                //     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                // towers.forEach(tower => tower.attack(hostiles[0]));
+                // hardcoded name = BAD
+                var towers = Game.rooms['E13N46'].find(
+                    FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                towers.forEach(tower => tower.attack(hostiles[0]));
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
