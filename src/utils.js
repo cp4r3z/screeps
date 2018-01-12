@@ -86,7 +86,7 @@ module.exports = {
                     w: 1,
                     c: 1
                 };
-                let energyUsed = 200, // EW
+                let energyUsed = 250, // EW
                     // Start with a minimum creep    
                     description = {
                         m: 2,
