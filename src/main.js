@@ -90,21 +90,23 @@ module.exports.loop = function() {
 
         var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
 
-        const isWipedOut = harvesters.length === 0 || builders.length === 0 || upgraders.length === 0 || hunters.length === 0;
+        const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
             if (!totalEnergy > spawnCapacity) {
                 totalCapacity = spawnCapacity;
             }
         }
+        const isUnderAttack = hostiles.length > 0;
+
         const isAtCapacity = totalEnergy >= totalCapacity,
             isSpawning = Game.spawns[spawnName].spawning,
-            shouldSpawn = isWipedOut || (!isSpawning && isAtCapacity);
+            shouldSpawn = isWipedOut || isUnderAttack || (!isSpawning && isAtCapacity);
 
         if (shouldSpawn) {
             let newName;
-
-            if (hostiles.length > 0) {
+            // This Under Attack logic could produce non-ideal attackers.
+            if (isUnderAttack) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
                 Game.notify(`UNDER ATTACK`);
