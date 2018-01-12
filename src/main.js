@@ -30,10 +30,10 @@ module.exports.loop = function() {
                 min: 4
             },
             upgraders: {
-                min: 4
+                min: 3
             },
             builders: {
-                min: 6
+                min: 3
             },
             hunters: {
                 min: 2
