@@ -10,13 +10,32 @@ const CONFIG = require('./config'),
     roleScout = require('./role.scout'),
     roleKiller = require('./role.killer');
 
-//UTILS.creep.parts.getHeavy(1099);
+// all these need to get pushed into a config file. UGLY
+const SPAWN_PROPS = {
+        harvesters: {
+            min: 4
+        },
+        upgraders: {
+            min: 3
+        },
+        builders: {
+            min: 3
+        },
+        hunters: {
+            min: 2
+        }
+    },
+    CREEP_PROPS = {
+        // These are RATIOS
+        parts: {
+            worker: { m: 2, w: 1, c: 1 },
+            killer: { m: 2, t: 1, a: 1 }
+        }
 
-module.exports.loop = function() {
+    };
 
-    const spawnName = 'Spawn1', // eventually this will have to be independent...
-
-        spawnEnergy = Game.spawns[spawnName].energy,
+const logicSpawn = function(spawnName) {
+    const spawnEnergy = Game.spawns[spawnName].energy,
         extensions = Game.spawns[spawnName].room.find(FIND_MY_STRUCTURES, {
             filter: (extension) => {
                 return extension.structureType == STRUCTURE_EXTENSION;
@@ -25,29 +44,7 @@ module.exports.loop = function() {
         totalEnergy = spawnEnergy + extensions.reduce((total, extension) => total + extension.energy, 0),
         spawnCapacity = Game.spawns[spawnName].energyCapacity;
     let totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + extension.energyCapacity, 0);
-    // all these need to get pushed into a config file. UGLY
-    const SPAWN_PROPS = {
-            harvesters: {
-                min: 4
-            },
-            upgraders: {
-                min: 3
-            },
-            builders: {
-                min: 3
-            },
-            hunters: {
-                min: 2
-            }
-        },
-        CREEP_PROPS = {
-            // These are RATIOS
-            parts: {
-                worker: { m: 2, w: 1, c: 1 },
-                killer: { m: 2, t: 1, a: 1 }
-            }
 
-        };
 
     // Uncomment this to see the total energy available for spawning. I need a debug module.
     //console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
@@ -55,16 +52,16 @@ module.exports.loop = function() {
     // TOWER LOGIC
 
     const hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
-    // hardcoded name = BAD
+
     const towers = Game.spawns[spawnName].room.find(
         FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
     towers.forEach(tower => {
 
         if (hostiles.length > 0) {
-            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             tower.attack(closestHostile);
         } else {
-            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+            const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => structure.hits < structure.hitsMax
             });
             if (closestDamagedStructure) {
@@ -137,6 +134,32 @@ module.exports.loop = function() {
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
             }
         }
+    }
+
+    for (const name in Game.creeps) {
+        const creep = Game.creeps[name];
+        if (creep.memory.role == 'harvester') {
+            roleHarvester.run(creep);
+        }
+        if (creep.memory.role == 'upgrader') {
+            roleUpgrader.run(creep);
+        }
+        if (creep.memory.role == 'builder') {
+            roleBuilder.run(creep);
+        }
+        if (creep.memory.role == 'killer') {
+            roleKiller.run(creep);
+        }
+        if (creep.memory.role == 'scout') {
+            roleScout.run(creep);
+        }
+    }
+};
+
+module.exports.loop = function() {
+
+    for (const spawnName in Game.spawns) {
+        logicSpawn(spawnName);
     }
 
     for (const name in Game.creeps) {
