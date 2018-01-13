@@ -49,16 +49,10 @@ module.exports = {
             getMinWorker() {
                 return [WORK, CARRY, MOVE, MOVE]; // 250
             },
-            getWorker(energyCapacity, extendedDesc) {
+            getCreepDesc(energyCapacity, desc) {
                 if (energyCapacity <= 250) {
                     return this.getMinWorker();
                 } else {
-                    const baseDesc = {
-                            m: 2,
-                            w: 1,
-                            c: 1
-                        },
-                        desc = _.merge(baseDesc, extendedDesc);
                     let energyUsed = 0,
                         description = {
                             m: 0,

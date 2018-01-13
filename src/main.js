@@ -40,13 +40,10 @@ module.exports.loop = function() {
             }
         },
         CREEP_PROPS = {
-            // odd that these things aren't arrays of strings... shrug
+            // These are RATIOS
             parts: {
-                carry_fast: { m: 2, w: 1, c: 1 }, // = 100 + 50*3 = 250
-                carry_big: { m: 4, w: 2, c: 6 }, // = 100*2 + 50*8 = 600
-                upgrade_big: { m: 7, w: 1, c: 7 }, // = 100*1 + 50*14 = 800
-                // hey you know what? Maybe the upgraders don't need WORK. OH YES THEY DO!
-                kill: { m: 2, t: 1, a: 1 }
+                worker: { m: 2, w: 1, c: 1 },
+                killer: { m: 2, t: 1, a: 1 }
             }
 
         };
@@ -109,11 +106,10 @@ module.exports.loop = function() {
             if (isUnderAttack) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
-                const killDesc = { a: 1, t: 1, m: 2 };
                 Game.notify(`UNDER ATTACK`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy, killDesc).list, newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'hunter' } });
                 }
                 // hardcoded name = BAD
                 var towers = Game.rooms['E13N46'].find(
@@ -122,17 +118,17 @@ module.exports.loop = function() {
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'harvester' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
 
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'upgrader' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'upgrader' } });
 
             } else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'builder' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
