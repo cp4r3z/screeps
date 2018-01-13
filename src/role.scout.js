@@ -8,7 +8,7 @@ const roleScout = {
                     //console.log('Now heading to room ' + route[0].room);
                     const exit = creep.pos.findClosestByRange(route[0].exit);
                     creep.moveTo(exit);
-                }
+                }                
             } else {
                 creep.say(`I'm lost`);
             }

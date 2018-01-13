@@ -7,6 +7,7 @@ const CONFIG = require('./config'),
     roleHarvester = require('./role.harvester'),
     roleUpgrader = require('./role.upgrader'),
     roleBuilder = require('./role.builder'),
+    roleBuilderSpawn = require('./role.builder.spawn'),
     roleScout = require('./role.scout'),
     roleKiller = require('./role.killer');
 
@@ -172,6 +173,9 @@ module.exports.loop = function() {
         }
         if (creep.memory.role == 'builder') {
             roleBuilder.run(creep);
+        }
+        if (creep.memory.role == 'builderspawn') {
+            roleBuilderSpawn.run(creep);
         }
         if (creep.memory.role == 'killer') {
             roleKiller.run(creep);
