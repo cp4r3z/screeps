@@ -1,4 +1,4 @@
-var roleKiler = {
+var roleKiller = {
 
     /** @param {Creep} creep **/
     run(creep) {
