@@ -50,20 +50,27 @@ module.exports.loop = function() {
 
     // Uncomment this to see the total energy available for spawning. I need a debug module.
     //console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
-    var tower = Game.getObjectById('5a51aac196005e55af510071');
-    if (tower) {
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax
-        });
-        if (closestDamagedStructure) {
-            tower.repair(closestDamagedStructure);
-        }
 
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (closestHostile) {
+    // TOWER LOGIC
+
+    const hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
+    // hardcoded name = BAD
+    const towers = Game.spawns[spawnName].room.find(
+        FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
+    towers.forEach(tower => {
+
+        if (hostiles.length > 0) {
+            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             tower.attack(closestHostile);
+        } else {
+            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => structure.hits < structure.hitsMax
+            });
+            if (closestDamagedStructure) {
+                tower.repair(closestDamagedStructure);
+            }
         }
-    }
+    });
 
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
@@ -83,9 +90,7 @@ module.exports.loop = function() {
         const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'),
             upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'),
             builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'),
-            hunters = _.filter(Game.creeps, (creep) => creep.memory.role == 'hunter');
-
-        var hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
+            killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer');
 
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
@@ -107,28 +112,25 @@ module.exports.loop = function() {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
                 Game.notify(`UNDER ATTACK`);
-                if (hunters.length < SPAWN_PROPS.hunters.min) {
+                if (killers.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'killer' } });
                 }
-                // hardcoded name = BAD
-                var towers = Game.rooms['E13N46'].find(
-                    FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
-                towers.forEach(tower => tower.attack(hostiles[0]));
+
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
 
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'upgrader' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'upgrader' } });
 
             } else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy,CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
