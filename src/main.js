@@ -7,7 +7,8 @@ const CONFIG = require('./config'),
     roleHarvester = require('./role.harvester'),
     roleUpgrader = require('./role.upgrader'),
     roleBuilder = require('./role.builder'),
-    roleScout = require('./role.scout');
+    roleScout = require('./role.scout'),
+    roleKiller = require('./role.killer');
 
 //UTILS.creep.parts.getHeavy(1099);
 
