@@ -60,7 +60,7 @@ module.exports = {
                         },
                         desc = _.merge(baseDesc, extendedDesc);
                     let energyUsed = 0,
-                        description = _.merge(desc, {
+                        description = {
                             m: 0,
                             w: 0,
                             c: 0,
@@ -69,13 +69,13 @@ module.exports = {
                             h: 0,
                             cl: 0,
                             t: 0
-                        }),
+                        },
                         adding = true;
                     // Ok, there has to be a better way to do this.
                     while (adding) {
                         let added = false;
-                        for (const part in baseDesc) {
-                            for (let i = 0; i < baseDesc[part]; i++) {
+                        for (const part in desc) {
+                            for (let i = 0; i < desc[part]; i++) {
                                 energyUsed += BODYPART_COST[PARTS[part]];
                                 if (energyUsed <= energyCapacity) {
                                     description[part]++;

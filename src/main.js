@@ -109,7 +109,7 @@ module.exports.loop = function() {
             if (isUnderAttack) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
-                const killDesc = { a: 1, t: 1 };
+                const killDesc = { a: 1, t: 1, m: 2 };
                 Game.notify(`UNDER ATTACK`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
