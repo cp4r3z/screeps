@@ -48,7 +48,7 @@ const logicSpawn = function(spawnName) {
 
 
     // Uncomment this to see the total energy available for spawning. I need a debug module.
-    //console.log(`Total Energy: ${totalEnergy}/${totalCapacity}`);
+    //console.log(`Spawn: ${spawnName}, Total Energy: ${totalEnergy}/${totalCapacity}`);
 
     // TOWER LOGIC
 
@@ -86,10 +86,10 @@ const logicSpawn = function(spawnName) {
             Game.spawns[spawnName].pos.y, { align: 'left', opacity: 0.8 });
     } else {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
-        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'),
-            upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'),
-            builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'),
-            killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer');
+        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.room == Game.spawns[spawnName].room),
+            upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room == Game.spawns[spawnName].room),
+            builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room == Game.spawns[spawnName].room),
+            killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
 
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
