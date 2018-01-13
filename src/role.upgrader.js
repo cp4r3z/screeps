@@ -22,8 +22,8 @@ var roleUpgrader = {
 
             // this shit needs to be a module or something.
             let sources = _.flatten([
-                Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
-                Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
+                creep.room.find(FIND_SOURCES_ACTIVE),
+                creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER) && structure.store[RESOURCE_ENERGY] > 0;
                     }
