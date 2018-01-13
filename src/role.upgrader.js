@@ -38,7 +38,7 @@ var roleUpgrader = {
                     return creep.room.findPath(creep.pos, sourceA.pos).length - creep.room.findPath(creep.pos, sourceB.pos).length;
                 })[0];
                 //console.log(closestSource);
-                if (closestSource.structureType == STRUCTURE_CONTAINER) {
+                if (closestSource.structureType && closestSource.structureType == STRUCTURE_CONTAINER) {
                     if (creep.withdraw(closestSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(closestSource, { visualizePathStyle: { stroke: '#ffaa00' } });
                     }
