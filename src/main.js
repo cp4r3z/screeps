@@ -14,7 +14,7 @@ const CONFIG = require('./config'),
 // all these need to get pushed into a config file. UGLY
 const SPAWN_PROPS = {
         harvesters: {
-            min: 4
+            min: 3
         },
         upgraders: {
             min: 3
