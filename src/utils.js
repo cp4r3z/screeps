@@ -46,76 +46,49 @@ module.exports = {
                     cost
                 };
             },
-            list2(description) {
-                const BODYPART_COST = {
-                    "move": 50,
-                    "work": 100,
-                    "attack": 80,
-                    "carry": 50,
-                    "heal": 250,
-                    "ranged_attack": 150,
-                    "tough": 10,
-                    "claim": 600
-                };
-                const PARTS = {
-                    m: 'move',
-                    w: 'work',
-                    c: 'carry',
-                    a: 'attack',
-                    r: 'ranged_attack',
-                    h: 'heal',
-                    cl: 'claim',
-                    t: 'tough'
-                };
-
-                let list = [];
-                let cost = 0;
-                for (const part in description) {
-                    list = list.concat(Array(description[part]).fill(PARTS[part]));
-                    cost += BODYPART_COST[PARTS[part]] * description[part];
-                }
-                console.log(`Creep Cost: ${cost}`);
-                return {
-                    list,
-                    cost
-                };
+            getMinWorker() {
+                return [WORK, CARRY, MOVE, MOVE]; // 250
             },
-            getWorker(energyCapacity) {
-                const baseDesc = {
-                    m: 2,
-                    w: 1,
-                    c: 1
-                };
-                let energyUsed = 250, // EW
-                    // Start with a minimum creep    
-                    description = {
-                        m: 2,
-                        w: 1,
-                        c: 1,
-                        a: 0,
-                        r: 0,
-                        h: 0,
-                        cl: 0,
-                        t: 0
-                    },
-                    adding = true;
-                // Ok, there has to be a better way to do this.
+            getWorker(energyCapacity, extendedDesc) {
+                if (energyCapacity <= 250) {
+                    return this.getMinWorker();
+                } else {
+                    const baseDesc = {
+                            m: 2,
+                            w: 1,
+                            c: 1
+                        },
+                        desc = _.merge(baseDesc, extendedDesc);
+                    let energyUsed = 0,
+                        description = _.merge(desc, {
+                            m: 0,
+                            w: 0,
+                            c: 0,
+                            a: 0,
+                            r: 0,
+                            h: 0,
+                            cl: 0,
+                            t: 0
+                        }),
+                        adding = true;
+                    // Ok, there has to be a better way to do this.
                     while (adding) {
-                    let added = false;
-                    for (const part in baseDesc) {
-                        for (let i = 0; i < baseDesc[part]; i++) {
-                            energyUsed += BODYPART_COST[PARTS[part]];
-                            if (energyUsed <= energyCapacity) {
-                                description[part]++;
-                                added = true;
-                            } else {
-                                energyUsed -= BODYPART_COST[PARTS[part]];
+                        let added = false;
+                        for (const part in baseDesc) {
+                            for (let i = 0; i < baseDesc[part]; i++) {
+                                energyUsed += BODYPART_COST[PARTS[part]];
+                                if (energyUsed <= energyCapacity) {
+                                    description[part]++;
+                                    added = true;
+                                } else {
+                                    energyUsed -= BODYPART_COST[PARTS[part]];
+                                }
                             }
                         }
+                        if (!added) adding = false;
                     }
-                    if (!added) adding = false;
+                    return this.list(description);
                 }
-                return this.list(description);
             }
         }
     }

@@ -109,14 +109,15 @@ module.exports.loop = function() {
             if (isUnderAttack) {
                 // Hey we're under attack. Yay.
                 var username = hostiles[0].owner.username;
+                const killDesc = { a: 1, t: 1 };
                 Game.notify(`UNDER ATTACK`);
                 if (hunters.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy).list, newName, { memory: { role: 'hunter' } });
+                    Game.spawns[spawnName].spawnCreep(utils.creep.parts.getWorker(totalEnergy, killDesc).list, newName, { memory: { role: 'hunter' } });
                 }
                 // hardcoded name = BAD
                 var towers = Game.rooms['E13N46'].find(
-                    FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                    FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
                 towers.forEach(tower => tower.attack(hostiles[0]));
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
