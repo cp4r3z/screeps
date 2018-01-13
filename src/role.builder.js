@@ -21,26 +21,26 @@ var roleBuilder = {
             // Controller
             // Containers
             // 
-            //const roadNodes = [].concat(Game.spawns['Spawn1'].room.find(FIND_MY_SPAWNS),);
+            //const roadNodes = [].concat(creep.room.find(FIND_MY_SPAWNS),);
 
             function buildRoad(pos1, pos2) {
-                let path = Game.spawns['Spawn1'].room.findPath(pos1, pos2, {
+                let path = creep.room.findPath(pos1, pos2, {
                     ignoreCreeps: true
                 });
 
                 for (let pathPos of path) {
                     //create construction site (road)
-                    const sites = Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
+                    const sites = creep.room.getPositionAt(pathPos.x, pathPos.y).lookFor(LOOK_CONSTRUCTION_SITES);
                     if (sites.length === 0) {
-                        Game.spawns['Spawn1'].room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
+                        creep.room.getPositionAt(pathPos.x, pathPos.y).createConstructionSite(STRUCTURE_ROAD);
                         //console.log(`Making a construction site: [ROAD] @ ${pathPos.x},${pathPos.y}`);
                     }
                 }
             }
 
             const sources = [].concat(
-                Game.spawns['Spawn1'].room.find(FIND_SOURCES_ACTIVE),
-                Game.spawns['Spawn1'].room.find(FIND_MY_STRUCTURES, {
+                creep.room.find(FIND_SOURCES_ACTIVE),
+                creep.room.find(FIND_MY_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_EXTENSION ||
                             structure.structureType == STRUCTURE_CONTAINER);
@@ -50,8 +50,8 @@ var roleBuilder = {
             // This gets out of control.
             /*
                         for (let source of sources) {
-                            buildRoad(Game.spawns['Spawn1'].pos, source.pos);
-                            buildRoad(Game.spawns['Spawn1'].room.controller.pos, source.pos);
+                            buildRoad(creep.pos, source.pos);
+                            buildRoad(creep.room.controller.pos, source.pos);
                         }
             */
             //var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
