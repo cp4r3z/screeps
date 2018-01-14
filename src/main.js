@@ -4,8 +4,8 @@
 
 const CONFIG = require('./config'),
     utils = require('./utils'),
-    logicRoom = require('./logic/logic.room.js'),
-    logicSpawn = require('./logic/logic.spawn.js'),
+    logicRoom = require('./logic.room.js'),
+    logicSpawn = require('./logic.spawn.js'),
     roleHarvester = require('./role.harvester'),
     roleUpgrader = require('./role.upgrader'),
     roleBuilder = require('./role.builder'),
