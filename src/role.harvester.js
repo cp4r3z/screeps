@@ -3,7 +3,6 @@ var roleUpgrader = require('./role.upgrader');
 const pathFlags = {
     ignoreCreeps: true,
     ignoreRoads: false
-
 };
 
 var roleHarvester = {
@@ -46,7 +45,7 @@ var roleHarvester = {
             if (target) {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     //creep.pos.findPathTo
-                    const path = creep.room.findPath(creep.pos, targetPos, pathFlags);
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
                     if(path.length > 0) {
                         creep.move(path[0].direction);
                     }
