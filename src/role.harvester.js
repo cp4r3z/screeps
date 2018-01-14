@@ -1,5 +1,11 @@
 var roleUpgrader = require('./role.upgrader');
 
+const pathFlags = {
+    ignoreCreeps: true,
+    ignoreRoads: false
+
+};
+
 var roleHarvester = {
 
     /** @param {Creep} creep **/
@@ -39,7 +45,13 @@ var roleHarvester = {
             }
             if (target) {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+                    //creep.pos.findPathTo
+                    const path = creep.room.findPath(creep.pos, targetPos, pathFlags);
+                    if(path.length > 0) {
+                        creep.move(path[0].direction);
+                    }
+                    //Eventually, let's try to reuse a path!
+                    //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             } else {
                 //upgrade
