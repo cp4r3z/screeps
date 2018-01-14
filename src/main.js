@@ -4,8 +4,8 @@
 
 const CONFIG = require('./config'),
     utils = require('./utils'),
-    logicRoom = require('./logic.room.js'),
-    logicSpawn = require('./logic.spawn.js'),
+    logicRoom = require('./logic.room'),
+    logicSpawn = require('./logic.spawn'),
     roleHarvester = require('./role.harvester'),
     roleUpgrader = require('./role.upgrader'),
     roleBuilder = require('./role.builder'),
@@ -27,7 +27,7 @@ module.exports.loop = function() {
     // ROOMS
 
     for (const room in Game.rooms) {
-        logicRoom(room);
+        logicRoom.planner(room);
     }
 
     // SPAWNS
