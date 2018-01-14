@@ -76,7 +76,7 @@ module.exports = (spawnName) => {
             killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
 
         const constructionSites = Game.spawns[spawnName].room.find(FIND_MY_CONSTRUCTION_SITES);
-        const minBuilder = (constructionSites.length > 1) ? 1 : SPAWN_PROPS.builders.min;
+        const minBuilder = (constructionSites.length >1) ? SPAWN_PROPS.builders.min:1;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
