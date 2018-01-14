@@ -8,7 +8,7 @@ module.exports = (spawnName) => {
                 min: 3
             },
             upgraders: {
-                min: 3
+                min: 2
             },
             builders: {
                 min: 3
@@ -21,6 +21,7 @@ module.exports = (spawnName) => {
             // These are RATIOS
             parts: {
                 worker: { m: 2, w: 1, c: 1 },
+                slow_worker: { m: 1, w: 1, c: 1 },
                 killer: { m: 2, t: 1, a: 1 }
             }
 
@@ -74,6 +75,8 @@ module.exports = (spawnName) => {
             builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room == Game.spawns[spawnName].room),
             killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
 
+        const constructionSites = Game.spawns[spawnName].room.find(FIND_MY_CONSTRUCTION_SITES);
+        const minBuilder = (constructionSites.length === 0) ? 1 : SPAWN_PROPS.builders.min;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
@@ -107,9 +110,9 @@ module.exports = (spawnName) => {
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'upgrader' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
 
-            } else if (builders.length < SPAWN_PROPS.builders.min) {
+            } else if (builders.length < minBuilder) {
                 newName = 'Builder' + Game.time;
                 console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
