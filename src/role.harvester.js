@@ -59,6 +59,8 @@ var roleHarvester = {
                     const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
                     if (path.length > 0) {
                         creep.move(path[0].direction);
+                    } else {
+                        creep.say('Lost');
                     }
                     //Eventually, let's try to reuse a path!
                     //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
