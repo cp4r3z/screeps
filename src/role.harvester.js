@@ -25,7 +25,7 @@ var roleHarvester = {
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
                 if (path.length > 0) {
-                    // Sure, this is ugly.
+                    // Sure, this is ugly. And as it turns out, pointless.
                     if (path.length<3){
                         creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
                     } else {

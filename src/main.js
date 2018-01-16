@@ -4,14 +4,9 @@
 
 const CONFIG = require('./config'),
     utils = require('./utils'),
+    logicCreep = require('./logic.creep'),
     logicRoom = require('./logic.room'),
-    logicSpawn = require('./logic.spawn'),
-    roleHarvester = require('./role.harvester'),
-    roleUpgrader = require('./role.upgrader'),
-    roleBuilder = require('./role.builder'),
-    roleBuilderSpawn = require('./role.builder.spawn'),
-    roleScout = require('./role.scout'),
-    roleKiller = require('./role.killer');
+    logicSpawn = require('./logic.spawn');
 
 module.exports.loop = function() {
 
@@ -38,25 +33,5 @@ module.exports.loop = function() {
 
     // CREEPS
 
-    for (const name in Game.creeps) {
-        const creep = Game.creeps[name];
-        if (creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        }
-        if (creep.memory.role == 'builderspawn') {
-            roleBuilderSpawn.run(creep);
-        }
-        if (creep.memory.role == 'killer') {
-            roleKiller.run(creep);
-        }
-        if (creep.memory.role == 'scout') {
-            roleScout.run(creep);
-        }
-    }
+    logicCreep();
 }
