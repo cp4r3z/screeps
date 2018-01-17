@@ -23,6 +23,7 @@ module.exports.loop = function() {
 
     for (const room in Game.rooms) {
         logicRoom.planner(room);
+        logicRoom.status(room);
     }
 
     // SPAWNS
