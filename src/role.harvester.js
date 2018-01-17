@@ -20,23 +20,20 @@ var roleHarvester = {
             creep.say('transfering');
         }
 
-        if (creep.memory.harvesting) {
+        function harvestSources() {
             var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
                 if (path.length > 0) {
-                    // Sure, this is ugly. And as it turns out, pointless.
-                    if (path.length<3){
-                        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
-                    } else {
-                        creep.move(path[0].direction);
-                    }
-                    //creep.move(path[0].direction);
+                    creep.move(path[0].direction);
+                } else {
+                    creep.say('Lost');
                 }
-                //creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
-        else {
+        if (creep.memory.harvesting) {
+            harvestSources();
+        } else {
             // Start by filling extensions and spawns
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
@@ -65,8 +62,7 @@ var roleHarvester = {
                     //Eventually, let's try to reuse a path!
                     //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                 }
-            }
-            else {
+            } else {
                 //upgrade
                 creep.say('upppgrade');
                 roleUpgrader.run(creep);
