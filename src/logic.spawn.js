@@ -113,7 +113,7 @@ module.exports = (spawnName) => {
             } else if (harvestersMineral.length < SPAWN_PROPS.harvestersMineral.min) {
                 newName = 'HarvesterMineral' + Game.time;
                 console.log('Attempting to spawn new mineral harvester: ' + newName);
-                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterMineral' } });
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
