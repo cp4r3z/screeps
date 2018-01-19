@@ -20,6 +20,23 @@ var roleHarvester = {
             creep.say('transfering');
         }
 
+        function pickupDroppedEnergy() {
+            const target = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType == RESOURCE_ENERGY });
+            if (target) {
+                if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
+                    if (path.length > 0) {
+                        creep.move(path[0].direction);
+                    } else {
+                        creep.say('Lost');
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function harvestSources() {
             var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
@@ -31,18 +48,9 @@ var roleHarvester = {
                 }
             }
         }
+
         if (creep.memory.harvesting) {
-            let target = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
-            if(target){
-                if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
-                    if (path.length > 0) {
-                        creep.move(path[0].direction);
-                    } else {
-                        creep.say('Lost');
-                    }
-                }
-            }else{
+            if (!pickupDroppedEnergy()) {
                 harvestSources();
             }
         } else {
