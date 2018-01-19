@@ -21,8 +21,9 @@ var roleHarvester = {
         }
 
         function pickupDroppedEnergy() {
-            const target = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType == RESOURCE_ENERGY });
-            if (target) {
+            const targets = creep.room.find(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType == RESOURCE_ENERGY });
+            if (targets.length) {
+                const target = creep.pos.findClosestByPath(targets);
                 if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
                     const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
                     if (path.length > 0) {
@@ -31,10 +32,9 @@ var roleHarvester = {
                         creep.say('Lost');
                     }
                 }
-                return true;
-            } else {
-                return false;
+
             }
+            return targets.length > 0;
         }
 
         function harvestSources() {
