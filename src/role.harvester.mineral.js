@@ -10,12 +10,12 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run(creep) {
 
-        if (!creep.memory.harvesting && creep.carry.energy === 0) {
+        if (!creep.memory.harvesting && _.sum(creep.carry) === 0) {
             creep.memory.harvesting = true;
             creep.say('harvesting');
         }
 
-        if (creep.memory.harvesting && creep.carry.energy == creep.carryCapacity) {
+        if (creep.memory.harvesting && _.sum(creep.carry) == creep.carryCapacity) {
             creep.memory.harvesting = false;
             creep.say('transfering');
         }
