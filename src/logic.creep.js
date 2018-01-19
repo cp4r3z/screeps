@@ -1,5 +1,6 @@
 const role = {
     harvester: require('./role.harvester'),
+    harvesterMineral: require('./role.harvester.mineral'),
     upgrader: require('./role.upgrader'),
     builder: require('./role.builder'),
     builderSpawn: require('./role.builder.spawn'),
@@ -10,7 +11,7 @@ const role = {
 module.exports = () => {
     const rolesByRank = [
         'killer',
-        'harvester',
+        'harvesterMineral',
         'upgrader',
         'builder',
         'builderspawn',

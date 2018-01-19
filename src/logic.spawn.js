@@ -10,6 +10,9 @@ module.exports = (spawnName) => {
             upgraders: {
                 min: 2
             },
+            harvestersMineral: {
+                min: 1
+            },
             builders: {
                 min: 3
             },
@@ -71,12 +74,13 @@ module.exports = (spawnName) => {
     } else {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
         const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.room == Game.spawns[spawnName].room),
+            harvestersMineral = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvesterMineral' && creep.room == Game.spawns[spawnName].room),
             upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room == Game.spawns[spawnName].room),
             builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room == Game.spawns[spawnName].room),
             killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
 
         const constructionSites = Game.spawns[spawnName].room.find(FIND_MY_CONSTRUCTION_SITES);
-        const minBuilder = (constructionSites.length >1) ? SPAWN_PROPS.builders.min:1;
+        const minBuilder = (constructionSites.length > 1) ? SPAWN_PROPS.builders.min : 1;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
@@ -106,7 +110,10 @@ module.exports = (spawnName) => {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
-
+            } else if (harvestersMineral.length < SPAWN_PROPS.harvestersMineral.min) {
+                newName = 'HarvesterMineral' + Game.time;
+                console.log('Attempting to spawn new mineral harvester: ' + newName);
+                Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 console.log('Attempting to spawn new upgrader: ' + newName);
