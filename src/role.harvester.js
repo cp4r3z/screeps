@@ -35,7 +35,7 @@ var roleHarvester = {
             let target = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY);
             if(target){
                 if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-                    const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
                     if (path.length > 0) {
                         creep.move(path[0].direction);
                     } else {
