@@ -7,6 +7,10 @@ var roleKiller = {
             if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
             }
+        } else {
+            if (target.recycle(creep) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target);
+            }
         }
     }
 };
