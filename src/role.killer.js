@@ -2,13 +2,15 @@ var roleKiller = {
 
     /** @param {Creep} creep **/
     run(creep) {
-        const target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        let target;
+        target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if (target) {
             if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
             }
-        } else {
-            if (target.recycle(creep) == ERR_NOT_IN_RANGE) {
+        } else{
+            target = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+            if (target.recycleCreep(creep) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(target);
             }
         }
