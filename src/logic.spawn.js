@@ -90,9 +90,9 @@ module.exports = (spawnName) => {
         }
         const isUnderAttack = hostiles.length > 0;
 
-        const isAtCapacity = totalEnergy >= totalCapacity,
+        const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = Game.spawns[spawnName].spawning,
-            shouldSpawn = isWipedOut || isUnderAttack || (!isSpawning && isAtCapacity);
+            shouldSpawn = !isSpawning && (isWipedOut || isUnderAttack || isAtCapacity);
 
         if (shouldSpawn) {
             let newName;

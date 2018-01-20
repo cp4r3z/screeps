@@ -21,13 +21,29 @@ var roleHarvester = {
         }
 
         function harvestSources() {
-            var source = creep.pos.findClosestByPath(FIND_MINERALS);
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
-                if (path.length > 0) {
-                    creep.move(path[0].direction);
-                } else {
-                    creep.say('Lost');
+            let target;
+            // TODO!!!! Hardcoded resource
+            const containers = creep.room.find(FIND_STRUCTURES, structure => structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ZYNTHIUM] > 0);
+            if (containers.length > 0) {
+                // Harvest from the containers
+                target = creep.pos.findClosestByPath(containers);
+                if (creep.withdraw(target) == ERR_NOT_IN_RANGE) {
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
+                    if (path.length > 0) {
+                        creep.move(path[0].direction);
+                    } else {
+                        creep.say('Lost');
+                    }
+                }
+            } else {
+                target = creep.pos.findClosestByPath(FIND_MINERALS); // I feel like this needs to be determined by need, not distance.
+                if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
+                    if (path.length > 0) {
+                        creep.move(path[0].direction);
+                    } else {
+                        creep.say('Lost');
+                    }
                 }
             }
         }
@@ -35,11 +51,13 @@ var roleHarvester = {
             harvestSources();
         } else {
             // Start by filling extensions and spawns
-            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity;
-                }
-            });
+            const storages = creep.room.find(FIND_STRUCTURES, structure => structure.structureType == STRUCTURE_STORAGE);
+            let target;
+            if (storages.length > 0) {
+                target = creep.pos.findClosestByRange(FIND_STRUCTURES, structure => structure.structureType == STRUCTURE_STORAGE && _.sum(structure.store) < structure.storeCapacity);
+            } else {
+                target = creep.pos.findClosestByRange(FIND_STRUCTURES, structure => structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity / 2); // fill half way?
+            }
 
             if (target) {
                 // TODO!!!! Hardcoded resource
@@ -56,7 +74,7 @@ var roleHarvester = {
                 }
             } else {
                 //upgrade
-                creep.say('NoTarget');                
+                creep.say('NoTarget');
             }
         }
     }
