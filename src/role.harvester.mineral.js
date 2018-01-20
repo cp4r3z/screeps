@@ -28,7 +28,7 @@ var roleHarvester = {
                 // Harvest from the containers
                 target = creep.pos.findClosestByPath(containers);
                 // TODO!!!! Hardcoded resource
-                if (creep.withdraw(target,RESOURCE_ZYNTHIUM) == ERR_NOT_IN_RANGE) {
+                if (creep.withdraw(target, RESOURCE_ZYNTHIUM) == ERR_NOT_IN_RANGE) {
                     const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
                     if (path.length > 0) {
                         creep.move(path[0].direction);
@@ -51,13 +51,23 @@ var roleHarvester = {
         if (creep.memory.harvesting) {
             harvestSources();
         } else {
-            // Start by filling extensions and spawns
-            const storages = creep.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_STORAGE });
             let target;
-            if (storages.length > 0) {
-                target = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_STORAGE && _.sum(structure.store) < structure.storeCapacity });
+
+            //TODO: Figure out better logic for this... it's getting messy.
+
+            // Fill terminals that aren't full.
+            const terminal = creep.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_TERMINAL && _.sum(structure.store) < structure.storeCapacity });
+            if (terminal.length > 0) {
+                target = terminal[0];
             } else {
-                target = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity / 2 }); // fill half way?
+                // Fill extensions and spawns
+                const storages = creep.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_STORAGE });
+
+                if (storages.length > 0) {
+                    target = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_STORAGE && _.sum(structure.store) < structure.storeCapacity });
+                } else {
+                    target = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity / 2 }); // fill half way?
+                }
             }
 
             if (target) {
