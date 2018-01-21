@@ -6,6 +6,7 @@ const CONFIG = require('./config'),
     utils = require('./utils'),
     logicCreep = require('./logic.creep'),
     logicRoom = require('./logic.room'),
+    logicMarket = require('./logic.market'),
     logicSpawn = require('./logic.spawn');
 
 module.exports.loop = function() {
@@ -17,6 +18,12 @@ module.exports.loop = function() {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
         }
+    }
+
+    // MARKET
+
+    for (const room in Game.rooms) {
+        logicMarket.sales(room);
     }
 
     // ROOMS
