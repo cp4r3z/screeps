@@ -72,4 +72,7 @@ Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, 0.75, 2750, "W13N46");
 
 Game.market.deal('5a63746997377d1290cc9625', 2750, "E13N46");
 
+//buy ghodium
+Game.market.deal('5a5f9fea735d4f2dd739a4a2', 500, "E13N46");
+
 const cost = Game.market.calcTransactionCost(1, 'E10N30', 'E13N46');
