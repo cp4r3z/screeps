@@ -80,6 +80,7 @@ module.exports = (spawnName) => {
             killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
 
         const constructionSites = Game.spawns[spawnName].room.find(FIND_MY_CONSTRUCTION_SITES);
+        const extractors = Game.spawns[spawnName].room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_EXTRACTOR });
         const minBuilder = (constructionSites.length > 1) ? SPAWN_PROPS.builders.min : 1;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
@@ -88,6 +89,8 @@ module.exports = (spawnName) => {
                 totalCapacity = spawnCapacity;
             }
         }
+        const minHarvestersMineral = (extractors.length > 0) ? SPAWN_PROPS.harvestersMineral.min : 0;
+
         const isUnderAttack = hostiles.length > 0;
 
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
@@ -110,7 +113,7 @@ module.exports = (spawnName) => {
                 newName = 'Harvester' + Game.time;
                 console.log('Attempting to spawn new harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
-            } else if (harvestersMineral.length < SPAWN_PROPS.harvestersMineral.min) {
+            } else if (harvestersMineral.length < minHarvestersMineral) {
                 newName = 'HarvesterMineral' + Game.time;
                 console.log('Attempting to spawn new mineral harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
