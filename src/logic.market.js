@@ -28,7 +28,7 @@ module.exports = {
                 // Figure out the "going rate"
                 const price = 0.7;
                 const totalAmount = resourceThreshold;
-                //Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, price, totalAmount, roomName);
+                const marketResult = "fix market";//Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, price, totalAmount, roomName);
             }
 
         } else {
