@@ -14,7 +14,7 @@ module.exports = () => {
         'harvesterMineral',
         'upgrader',
         'builder',
-        'builderspawn',
+        'builderSpawn',
         'scout'
     ];
 
