@@ -5,16 +5,16 @@ module.exports = (spawnName) => {
     // all these need to get pushed into a config file. UGLY
     const SPAWN_PROPS = {
             harvesters: {
-                min: 3
+                min: 2
             },
             upgraders: {
-                min: 2
+                min: 1
             },
             harvestersMineral: {
                 min: 1
             },
             builders: {
-                min: 3
+                min: 2
             },
             hunters: {
                 min: 2
