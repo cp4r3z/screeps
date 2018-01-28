@@ -20,6 +20,23 @@ var roleHarvester = {
             creep.say('transfering');
         }
 
+        function pickupDroppedMinerals() {
+            const targets = creep.room.find(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType !== RESOURCE_ENERGY });
+            if (targets.length) {
+                const target = creep.pos.findClosestByPath(targets);
+                if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
+                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
+                    if (path.length > 0) {
+                        creep.move(path[0].direction);
+                    } else {
+                        creep.say('Lost');
+                    }
+                }
+
+            }
+            return targets.length > 0;
+        }
+
         function harvestSources() {
             let target;
             // TODO!!!! Hardcoded resource
@@ -49,7 +66,9 @@ var roleHarvester = {
             }
         }
         if (creep.memory.harvesting) {
-            harvestSources();
+            if (!pickupDroppedMinerals()) {
+                harvestSources();
+            }
         } else {
             let target;
 
