@@ -52,17 +52,12 @@ module.exports = () => {
         const hasEnergy = terminal.store[RESOURCE_ENERGY] > resourceThreshold; // Maybe this needs to be considered when we have multiple orders active.
         // Math.ceil( amount * ( 1 - Math.exp(-distanceBetweenRooms/30) ) )
 
-        _.each(terminal.store, resource => {
-            if (resource == RESOURCE_ENERGY) {
-                return false;
-            }
-            
+        _.each(terminal.store, (amount, resource) => {
             // Determine if the resource is found in the sell array above.
             const shouldSell = _.find(orders.sell, { resource: resource });
 
             const hasResource = terminal.store[resource] > resourceThreshold;
             if (hasEnergy && hasResource && shouldSell) {
-                console.log(`market: Fix ordering!`);
                 const price = 0.75; // Figure out the "going rate"
                 const totalAmount = resourceThreshold;
                 const existingOrder = _.filter(Game.market.orders, {
