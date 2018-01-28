@@ -25,18 +25,16 @@ module.exports.loop = function() {
         }
     }
 
-    // MARKET
-
-    for (const room in Game.rooms) {
-        logicMarket.sales(room);
-    }
-
     // ROOMS
 
     for (const room in Game.rooms) {
         logicRoom.planner(room);
         logicRoom.status(room);
     }
+
+    // MARKET
+
+    logicMarket();
 
     // SPAWNS
 
