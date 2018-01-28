@@ -70,7 +70,9 @@ module.exports = () => {
                     } else {
                         //Extend an inactive order
                         const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold);
-                        if (rc !== 0) {
+                        if (rc === 0) {
+                            console.log(`market: Extended order ${existingOrders[orderKeys[0]].id} by ${resourceThreshold} at ${price} credits.`);
+                        } else {
                             console.log(`market: Failed to extend order. Error code: ${rc}`);
                         }
                     }
