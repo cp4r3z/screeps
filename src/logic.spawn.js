@@ -4,7 +4,7 @@ const utils = require('./utils'),
 module.exports = (spawnName) => {
 
     // Get the room status from memory
-    const roomStatus = Memory.rooms[Game.spawns[spawnName].room].status;
+    const roomStatus = Memory.rooms[Game.spawns[spawnName].room.name].status;
 
     // all these need to get pushed into a config file. UGLY
     const SPAWN_PROPS = {
