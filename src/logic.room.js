@@ -1,5 +1,5 @@
 module.exports = {
-    planner(roomHash){
+    planner(roomHash) {
         /**
          * Overview:
          * 
@@ -13,15 +13,23 @@ module.exports = {
          * Plan the routes of screeps.
          */
 
-         // is Under Attack?
+        // is Under Attack?
 
-         // Are there construction sites?
+        // Are there construction sites?
     },
-    status(roomHash){
-         // is Under Attack?
-         const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
-         const isUnderAttack = hostiles.length > 0;
-         Memory.rooms[roomHash].status.isUnderAttack = isUnderAttack;
-         // Are there construction sites?
+    status(roomHash) {
+        // is Under Attack?
+        const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
+        const isUnderAttack = hostiles.length > 0;
+        let roomStatus = {
+            [roomHash]: {
+                status: {
+                    isUnderAttack: isUnderAttack
+                }
+            }
+        };
+        _.assign(Memory.rooms, roomStatus);
+
+        // Are there construction sites?
     }
 };

@@ -15,8 +15,13 @@ module.exports.loop = function() {
 
     for (const name in Memory.creeps) {
         if (!Game.creeps[name]) {
+            const adjective = _.sample(['Brave', 'Wise', 'Pure', 'Not Quite So Brave']);
+            console.log(`
+            In Memoriam: ${name}
+            ${adjective} ${Memory.creeps[name].role}.
+            Thank you for your service.
+            `);
             delete Memory.creeps[name];
-            console.log('Clearing non-existing creep memory:', name);
         }
     }
 
