@@ -1,6 +1,6 @@
 const roleScout = {
     run(creep) {
-        if (creep.room == creep.memory.dest) {
+        if (creep.room.name == creep.memory.dest) {
             //console.log('hey this isn't owned)
             if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller);
