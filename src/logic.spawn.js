@@ -103,20 +103,16 @@ module.exports = (spawnName) => {
 
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
-                console.log('Attempting to spawn new harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
             } else if (harvestersMineral.length < minHarvestersMineral) {
                 newName = 'HarvesterMineral' + Game.time;
-                console.log('Attempting to spawn new mineral harvester: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
-                console.log('Attempting to spawn new upgrader: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
 
             } else if (builders.length < minBuilder) {
                 newName = 'Builder' + Game.time;
-                console.log('Attempting to spawn new builder: ' + newName);
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
             } else {
                 //console.log('What a waste.');

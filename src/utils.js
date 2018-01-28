@@ -40,7 +40,7 @@ module.exports = {
                     list = list.concat(Array(description[part]).fill(PARTS[part]));
                     cost += BODYPART_COST[PARTS[part]] * description[part];
                 }
-                console.log(`Creep Cost: ${cost}`);
+                //console.log(`Creep Cost: ${cost}`);
                 return {
                     list,
                     cost
