@@ -50,7 +50,7 @@ var roleUpgrader = {
                 }
             } else {
                 // waste
-                console.log('role.upgrader: No sources available.');
+                //console.log('role.upgrader: No sources available.');
             }
         }
     }

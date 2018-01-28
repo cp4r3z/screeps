@@ -49,7 +49,7 @@ module.exports = () => {
 
         const terminal = Game.rooms[roomName].terminal;
 
-        const hasEnergy = terminal.store[RESOURCE_ENERGY] > resourceThreshold; // Maybe this needs to be considered when we have multiple orders active.
+        //const hasEnergy = terminal.store[RESOURCE_ENERGY] > resourceThreshold; // Maybe this needs to be considered when we have multiple orders active.
         // Math.ceil( amount * ( 1 - Math.exp(-distanceBetweenRooms/30) ) )
 
         _.each(terminal.store, (amount, resource) => {
@@ -57,23 +57,27 @@ module.exports = () => {
             const shouldSell = _.find(orders.sell, { resource: resource });
 
             const hasResource = terminal.store[resource] > resourceThreshold;
-            if (hasEnergy && hasResource && shouldSell) {
+            if (hasResource && shouldSell) {
                 const price = 0.75; // Figure out the "going rate"
                 const totalAmount = resourceThreshold;
-                const existingOrder = _.filter(Game.market.orders, {
+                const existingOrders = _.filter(roomOrders, {
                     resourceType: resource
                 });
-                if (existingOrder) {
-                    if (existingOrder.active) {
-                        //console.log(`market: Already an active order`);
+                const orderKeys = _.keys(existingOrders);
+                if (orderKeys.length == 1) {
+                    if (existingOrders[orderKeys[0]].active) {
+                        console.log(`market: Already an active order`);
                     } else {
                         //Extend an inactive order
-                        const rc = Game.market.extendOrder(shouldSell.id, resourceThreshold);
+                        const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold);
                         if (rc !== 0) {
-                            Game.notify(`market: Failed to extend order`);
+                            console.log(`market: Failed to extend order. Error code: ${rc}`);
                         }
                     }
                 } else {
+                    if (orderKeys.length > 1) {
+                        Game.notify(`market: Multiple orders for ${resource}.`);
+                    }
                     // Maybe we need to create an order...
                     const marketResult = "fix market"; //Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, price, totalAmount, roomName);
                     console.log(marketResult);
