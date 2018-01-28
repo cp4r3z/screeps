@@ -10,7 +10,7 @@ module.exports = {
         const resourceThreshold = 1000;
         //CPU - getAllOrders takes a lot, I guess.
         const myOrders = Game.market.getAllOrders(order => order.type == ORDER_SELL && order.roomName == roomName);
-        const inactiveOrders = _filter(Game.market.orders,{'active':false,'roomName':'E13N46'});
+        const inactiveOrders = _.filter(Game.market.orders,{'active':false,'roomName':'E13N46'});
         inactiveOrders.map(order=>console.log(`${order.id}: ${order.resourceType}`));
         //Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, .7, 1000, 'E13N46');
         const orderIds = {
