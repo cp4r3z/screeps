@@ -5,6 +5,7 @@ const role = {
     builder: require('./role.builder'),
     builderSpawn: require('./role.builder.spawn'),
     scout: require('./role.scout'),
+    scoutReserver: require('./role.scout.reserver'),
     killer: require('./role.killer')
 }
 
@@ -15,7 +16,8 @@ module.exports = () => {
         'upgrader',
         'builder',
         'builderSpawn',
-        'scout'
+        'scout',
+        'scoutReserver'
     ];
 
     const creepsRanked = _.sortBy(Game.creeps, [(creep) => rolesByRank.indexOf(Game.creeps[creep].memory.role)]);

@@ -72,6 +72,9 @@ module.exports = (spawnName) => {
             upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room == Game.spawns[spawnName].room),
             builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room == Game.spawns[spawnName].room),
             killers = _.filter(Game.creeps, (creep) => creep.memory.role == 'killer' && creep.room == Game.spawns[spawnName].room);
+        
+        // Find the scout reserver, regardless of room.
+        const scoutReservers = _.filter(Game.creeps, (creep) => creep.memory.role == 'scoutReserver');
 
         const constructionSites = Game.spawns[spawnName].room.find(FIND_MY_CONSTRUCTION_SITES);
         const extractors = Game.spawns[spawnName].room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_EXTRACTOR });
@@ -114,7 +117,10 @@ module.exports = (spawnName) => {
             } else if (builders.length < minBuilder) {
                 newName = 'Builder' + Game.time;
                 Game.spawns[spawnName].spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
-            } else {
+            } else if (scoutReservers.length<1 && Game.spawns[spawnName].room.name=='E12N47') {
+                newName = 'ScoutReserver' + Game.time;
+                Game.spawns[spawnName].spawnCreep([CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
+            }else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
             }

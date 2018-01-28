@@ -12,6 +12,9 @@ var roleUpgrader = {
             creep.say('upgrading');
         }
 
+        // Figure out if there's ghodium hydride, ghodium acid, or catalyzed ghodium acid laying around.
+        // or just go straight for the good stuff. RESOURCE_CATALYZED_GHODIUM_ACID
+
         if (creep.memory.upgrading) {
             if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
