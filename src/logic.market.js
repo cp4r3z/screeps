@@ -68,7 +68,7 @@ module.exports = () => {
                         //console.log(`market: Already an active order`);
                     } else {
                         //Extend an inactive order
-                        const rc = Game.market.extendOrder(existingOrder.id, resourceThreshold);
+                        const rc = Game.market.extendOrder(shouldSell.id, resourceThreshold);
                         if (rc !== 0) {
                             Game.notify(`market: Failed to extend order`);
                         }
