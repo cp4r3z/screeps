@@ -21,7 +21,7 @@ module.exports = {
          // is Under Attack?
          const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
          const isUnderAttack = hostiles.length > 0;
-
+         Memory.rooms[roomHash].status.isUnderAttack = isUnderAttack;
          // Are there construction sites?
     }
 };
