@@ -1,6 +1,10 @@
-const utils = require('./utils');
+const utils = require('./utils'),
+    logicTower = require('./logic.tower');
 
 module.exports = (spawnName) => {
+
+    // Get the room status from memory
+    const roomStatus = Memory.rooms[Game.spawns[spawnName].room].status;
 
     // all these need to get pushed into a config file. UGLY
     const SPAWN_PROPS = {
@@ -48,22 +52,9 @@ module.exports = (spawnName) => {
 
     const hostiles = Game.spawns[spawnName].room.find(FIND_HOSTILE_CREEPS);
 
-    const towers = Game.spawns[spawnName].room.find(
-        FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
-    towers.forEach(tower => {
-
-        if (hostiles.length > 0) {
-            const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-            tower.attack(closestHostile);
-        } else {
-            const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 1e5 // Um, this should probably be thought about.
-            });
-            if (closestDamagedStructure) {
-                tower.repair(closestDamagedStructure);
-            }
-        }
-    });
+    Game.spawns[spawnName].room
+        .find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } })
+        .map(logicTower);
 
     if (Game.spawns[spawnName].spawning) {
         const spawningCreep = Game.creeps[Game.spawns[spawnName].spawning.name];
@@ -73,6 +64,9 @@ module.exports = (spawnName) => {
             Game.spawns[spawnName].pos.y, { align: 'left', opacity: 0.8 });
     } else {
         // I feel like there's a way to use lodash to create a sorted "creeps" object
+
+        //TODO: Isn't this a room status thing?
+
         const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.room == Game.spawns[spawnName].room),
             harvestersMineral = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvesterMineral' && creep.room == Game.spawns[spawnName].room),
             upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room == Game.spawns[spawnName].room),
@@ -91,18 +85,16 @@ module.exports = (spawnName) => {
         }
         const minHarvestersMineral = (extractors.length > 0) ? SPAWN_PROPS.harvestersMineral.min : 0;
 
-        const isUnderAttack = hostiles.length > 0;
-
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = Game.spawns[spawnName].spawning,
-            shouldSpawn = !isSpawning && (isWipedOut || isUnderAttack || isAtCapacity);
+            shouldSpawn = !isSpawning && (isWipedOut || roomStatus.isUnderAttack || isAtCapacity);
 
         if (shouldSpawn) {
             let newName;
             // This Under Attack logic could produce non-ideal attackers.
-            if (isUnderAttack) {
+            if (roomStatus.isUnderAttack) {
                 // Hey we're under attack. Yay.
-                const username = hostiles[0].owner.username;
+                
                 Game.notify(`UNDER ATTACK`);
                 if (killers.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
