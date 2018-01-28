@@ -90,18 +90,18 @@ var roleHarvester = {
             }
 
             if (target) {
-                // TODO!!!! Hardcoded resource
-                if (creep.transfer(target, RESOURCE_ZYNTHIUM) == ERR_NOT_IN_RANGE) {
-                    //creep.pos.findPathTo
-                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
-                    if (path.length > 0) {
-                        creep.move(path[0].direction);
-                    } else {
-                        creep.say('Lost');
+                _.each(creep.carry, (amount, cargo) => {
+                    if (creep.transfer(target, cargo) == ERR_NOT_IN_RANGE) {
+                        const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
+                        if (path.length > 0) {
+                            creep.move(path[0].direction);
+                        } else {
+                            creep.say('Lost');
+                        }
+                        //Eventually, let's try to reuse a path!
+                        //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
                     }
-                    //Eventually, let's try to reuse a path!
-                    //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
-                }
+                });
             } else {
                 //upgrade
                 creep.say('NoTarget');
