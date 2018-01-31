@@ -21,15 +21,18 @@ module.exports = {
         // is Under Attack?
         const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
         const isUnderAttack = hostiles.length > 0;
+        const minerals = Game.rooms[roomHash].find(FIND_MINERALS);
+
         let roomStatus = {
             [roomHash]: {
                 status: {
                     isUnderAttack: isUnderAttack
-                }
+                },
+                minerals: minerals
             }
         };
         _.assign(Memory.rooms, roomStatus);
-
+        
         // Are there construction sites?
     }
 };

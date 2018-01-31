@@ -11,25 +11,17 @@ const CONFIG = require('./config'),
 
 module.exports.loop = function() {
 
-    // MEMORY
-
-    for (const name in Memory.creeps) {
-        if (!Game.creeps[name]) {
-            const adjective = _.sample(['Brave', 'Wise', 'Pure', 'Not Quite So Brave']);
-            console.log(`
-            In Memoriam: ${name}
-            ${adjective} ${Memory.creeps[name].role}.
-            Thank you for your service.
-            `);
-            delete Memory.creeps[name];
-        }
-    }
-
     // ROOMS
 
     for (const room in Game.rooms) {
         logicRoom.planner(room);
         logicRoom.status(room);
+    }
+
+    for (const room in Memory.rooms) {
+        if (!Game.rooms[room]) {
+            delete Memory.rooms[room];
+        }
     }
 
     // MARKET
@@ -45,4 +37,16 @@ module.exports.loop = function() {
     // CREEPS
 
     logicCreep();
+
+    for (const name in Memory.creeps) {
+        if (!Game.creeps[name]) {
+            const adjective = _.sample(['Brave', 'Wise', 'Pure', 'Not Quite So Brave']);
+            console.log(`
+                In Memoriam: ${name}
+                ${adjective} ${Memory.creeps[name].role}.
+                Thank you for your service.
+                `);
+            delete Memory.creeps[name];
+        }
+    }
 }
