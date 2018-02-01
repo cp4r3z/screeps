@@ -22,17 +22,19 @@ module.exports = {
         const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
         const isUnderAttack = hostiles.length > 0;
         const minerals = Game.rooms[roomHash].find(FIND_MINERALS);
+        const sources = Game.rooms[roomHash].find(FIND_SOURCES);
 
         let roomStatus = {
             [roomHash]: {
+                minerals: minerals,
+                sources: sources,
                 status: {
                     isUnderAttack: isUnderAttack
-                },
-                minerals: minerals
+                }
             }
         };
         _.assign(Memory.rooms, roomStatus);
-        
+
         // Are there construction sites?
     }
 };
