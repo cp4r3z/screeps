@@ -64,15 +64,17 @@ module.exports = {
                             cl: 0,
                             t: 0
                         },
-                        adding = true;
+                        adding = true,
+                        total=0;
                     // Ok, there has to be a better way to do this.
                     while (adding) {
                         let added = false;
                         for (const part in desc) {
                             for (let i = 0; i < desc[part]; i++) {
                                 energyUsed += BODYPART_COST[PARTS[part]];
-                                if (energyUsed <= energyCapacity) {
+                                if (energyUsed <= energyCapacity && total<50) {
                                     description[part]++;
+                                    total++;
                                     added = true;
                                 } else {
                                     energyUsed -= BODYPART_COST[PARTS[part]];

@@ -36,5 +36,7 @@ module.exports = {
         _.assign(Memory.rooms, roomStatus);
 
         // Are there construction sites?
+
+        //console.log(`Room: ${roomHash} Controller: ${Game.rooms[roomHash].controller.progress}/${Game.rooms[roomHash].controller.progressTotal} | ${Game.rooms[roomHash].controller.progress/Game.rooms[roomHash].controller.progressTotal} `);        
     }
 };

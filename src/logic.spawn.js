@@ -14,7 +14,7 @@ module.exports = (spawnName) => {
                 min: roomMemory.sources.length
             },
             upgraders: {
-                min: 1
+                min: roomMemory.sources.length
             },
             harvestersMineral: {
                 min: 1
@@ -92,12 +92,12 @@ module.exports = (spawnName) => {
 
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = spawn.spawning,
-            shouldSpawn = !isSpawning && (isWipedOut || room.status.isUnderAttack || isAtCapacity);
+            shouldSpawn = !isSpawning && (isWipedOut || roomMemory.status.isUnderAttack || isAtCapacity);
 
         if (shouldSpawn) {
             let newName;
             // This Under Attack logic could produce non-ideal attackers.
-            if (room.status.isUnderAttack) {
+            if (roomMemory.status.isUnderAttack) {
                 // Hey we're under attack. Yay.
 
                 Game.notify(`UNDER ATTACK`);
