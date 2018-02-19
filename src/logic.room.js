@@ -20,6 +20,7 @@ module.exports = {
     status(roomHash) {
 
         let status = {
+            constructionSites: spawn.room.find(FIND_MY_CONSTRUCTION_SITES),
             extensions: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
                 filter: (extension) => {
                     return extension.structureType == STRUCTURE_EXTENSION;
@@ -37,8 +38,6 @@ module.exports = {
         _.assign(Memory.rooms, {
             [roomHash]: status
         });
-
-        // Are there construction sites?
 
         //console.log(`Room: ${roomHash} Controller: ${Game.rooms[roomHash].controller.progress}/${Game.rooms[roomHash].controller.progressTotal} | ${Game.rooms[roomHash].controller.progress/Game.rooms[roomHash].controller.progressTotal} `);        
     }
