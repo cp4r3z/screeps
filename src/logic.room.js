@@ -20,7 +20,7 @@ module.exports = {
     status(roomHash) {
 
         let status = {
-            constructionSites: spawn.room.find(FIND_MY_CONSTRUCTION_SITES),
+            constructionSites: Game.rooms[roomHash].find(FIND_MY_CONSTRUCTION_SITES),
             extensions: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
                 filter: (extension) => {
                     return extension.structureType == STRUCTURE_EXTENSION;
