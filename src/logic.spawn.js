@@ -92,12 +92,12 @@ module.exports = (spawnName) => {
 
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = spawn.spawning,
-            shouldSpawn = !isSpawning && (isWipedOut || roomMemory.status.isUnderAttack || isAtCapacity);
+            shouldSpawn = !isSpawning && (isWipedOut || roomMemory.isUnderAttack || isAtCapacity);
 
         if (shouldSpawn) {
             let newName;
             // This Under Attack logic could produce non-ideal attackers.
-            if (roomMemory.status.isUnderAttack) {
+            if (roomMemory.isUnderAttack) {
                 // Hey we're under attack. Yay.
 
                 Game.notify(`UNDER ATTACK`);
@@ -109,7 +109,7 @@ module.exports = (spawnName) => {
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
-            } else if (harvestersMineral.length < minHarvestersMineral) {
+            } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral) {
                 newName = 'HarvesterMineral' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {

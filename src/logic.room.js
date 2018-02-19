@@ -18,22 +18,25 @@ module.exports = {
         // Are there construction sites?
     },
     status(roomHash) {
-        // is Under Attack?
-        const hostiles = Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS);
-        const isUnderAttack = hostiles.length > 0;
-        const minerals = Game.rooms[roomHash].find(FIND_MINERALS);
-        const sources = Game.rooms[roomHash].find(FIND_SOURCES);
 
-        let roomStatus = {
-            [roomHash]: {
-                minerals: minerals,
-                sources: sources,
-                status: {
-                    isUnderAttack: isUnderAttack
+        let status = {
+            extensions: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                filter: (extension) => {
+                    return extension.structureType == STRUCTURE_EXTENSION;
                 }
-            }
+            }),
+            hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
+            minerals: Game.rooms[roomHash].find(FIND_MINERALS),
+            sources: Game.rooms[roomHash].find(FIND_SOURCES)
         };
-        _.assign(Memory.rooms, roomStatus);
+
+        status.isUnderAttack = status.hostiles.length > 0;
+        
+        _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
+
+        _.assign(Memory.rooms, {
+            [roomHash]: status
+        });
 
         // Are there construction sites?
 

@@ -1,6 +1,6 @@
 module.exports = (tower) => {
     // Get the room status from memory
-    const roomStatus = Memory.rooms[tower.room.name].status;
+    const roomStatus = Memory.rooms[tower.room.name];
 
     if (roomStatus.isUnderAttack) {
         const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
