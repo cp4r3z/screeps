@@ -78,9 +78,8 @@ module.exports = (spawnName) => {
         // Find the scout reserver, regardless of room.
         const scoutReservers = _.filter(Game.creeps, (creep) => creep.memory.role == 'scoutReserver');
 
-        const constructionSites = spawn.room.find(FIND_MY_CONSTRUCTION_SITES);
         const extractors = spawn.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_EXTRACTOR });
-        const minBuilder = (constructionSites.length > 1) ? SPAWN_PROPS.builders.min : 1;
+        const minBuilder = (roomMemory.constructionSites.length > 1) ? SPAWN_PROPS.builders.min : 1;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
