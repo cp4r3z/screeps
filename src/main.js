@@ -24,10 +24,6 @@ module.exports.loop = function() {
         }
     }
 
-    // MARKET
-
-    logicMarket();
-
     // SPAWNS
 
     for (const spawn in Game.spawns) {
@@ -49,4 +45,8 @@ module.exports.loop = function() {
             delete Memory.creeps[name];
         }
     }
+
+    // MARKET
+
+    logicMarket();
 }

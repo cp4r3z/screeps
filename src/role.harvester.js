@@ -1,5 +1,8 @@
 var roleUpgrader = require('./role.upgrader');
 
+// Get the room status from memory
+const roomMemory = Memory.rooms[spawn.room.name];
+
 const pathFlags = {
     //ignoreCreeps: true,
     ignoreRoads: false
@@ -38,20 +41,41 @@ var roleHarvester = {
         }
 
         function harvestSources() {
-            var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+            let source;
+
+            function setNewSource() {
+                source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                creep.memory.sourceId = source.id;
+            }
+            
+            if (creep.memory.sourceId) {
+                source = Game.getObjectById(creep.memory.sourceId);
+                if (source.energy === 0) setNewSource();
+            } else setNewSource();
+
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                /*
                 const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
                 if (path.length > 0) {
                     creep.move(path[0].direction);
                 } else {
                     creep.say('Lost');
                 }
+                */
+                //http://docs.screeps.com/api/#Creep.moveTo
+                const retVal = creep.moveTo(source);
+                if (retVal != OK) {
+                    console.log(`creep ${creep.name} | moveTo err: ${retVal}`);
+                }
             }
         }
 
         if (creep.memory.harvesting) {
             if (!pickupDroppedEnergy()) {
-                harvestSources();
+                // Check to see if there are active sources
+                if (roomMemory.areActiveSources) {
+                    harvestSources();
+                }
             }
         } else {
             // Start by filling extensions and spawns

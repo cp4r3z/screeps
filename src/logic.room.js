@@ -28,11 +28,13 @@ module.exports = {
             }),
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
-            sources: Game.rooms[roomHash].find(FIND_SOURCES)
+            sources: Game.rooms[roomHash].find(FIND_SOURCES),
+            sourcesActive = Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE)
         };
 
         status.isUnderAttack = status.hostiles.length > 0;
-        
+        status.areActiveSources = status.sourcesActive > 0;
+
         _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
 
         _.assign(Memory.rooms, {
