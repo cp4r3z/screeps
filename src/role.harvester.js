@@ -1,5 +1,5 @@
-var roleUpgrader = require('./role.upgrader');
-
+const roleUpgrader = require('./role.upgrader'),
+    movement = require('./movement');
 
 const pathFlags = {
     //ignoreCreeps: true,
@@ -29,12 +29,7 @@ var roleHarvester = {
             if (targets.length) {
                 const target = creep.pos.findClosestByPath(targets);
                 if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
-                    if (path.length > 0) {
-                        creep.move(path[0].direction);
-                    } else {
-                        creep.say('Lost');
-                    }
+                    movement.toDest(creep, target);
                 }
 
             }
@@ -55,19 +50,7 @@ var roleHarvester = {
             } else setNewSource();
 
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                /*
-                const path = creep.room.findPath(creep.pos, source.pos, pathFlags);
-                if (path.length > 0) {
-                    creep.move(path[0].direction);
-                } else {
-                    creep.say('Lost');
-                }
-                */
-                //http://docs.screeps.com/api/#Creep.moveTo
-                const retVal = creep.moveTo(source);
-                if (retVal != OK) {
-                    console.log(`creep ${creep.name} | moveTo err: ${retVal}`);
-                }
+                movement.toDest(creep, source);
             }
         }
 
@@ -98,15 +81,7 @@ var roleHarvester = {
             }
             if (target) {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    //creep.pos.findPathTo
-                    const path = creep.room.findPath(creep.pos, target.pos, pathFlags);
-                    if (path.length > 0) {
-                        creep.move(path[0].direction);
-                    } else {
-                        creep.say('Lost');
-                    }
-                    //Eventually, let's try to reuse a path!
-                    //creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+                    movement.toDest(creep, target);
                 }
             } else {
                 //upgrade
