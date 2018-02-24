@@ -4,7 +4,7 @@ module.exports = (creep, roomMemory) => {
             console.log('hi');
             console.log(this.name); //assume this is the creep context?
         },
-        goGetEnergy() {
+        getEnergy() {
             if (roomMemory.storageWithEnergy.length > 0) {
                 // Take energy from storage units first
                 const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
