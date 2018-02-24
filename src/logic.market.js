@@ -66,7 +66,8 @@ module.exports = () => {
                 const orderKeys = _.keys(existingOrders);
                 if (orderKeys.length == 1) {
                     if (existingOrders[orderKeys[0]].active) {
-                        console.log(`market: Already an active order`);
+                        //console.log(`market: Already an active order`);
+                        // Maybe lower the price after some time?
                     } else {
                         //Extend an inactive order
                         const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold);
