@@ -20,6 +20,9 @@ var roleUpgrader = {
                 creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
             }
         } else {
+
+// need a util method to go get energy prioritizing the storage. STEAL from builder!
+
             // find nearest source (with energy)
             // use findPath to sort
 

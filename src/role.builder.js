@@ -1,5 +1,6 @@
 const roleHarvester = require('./role.harvester'),
-    movement = require('./movement');
+    movement = require('./movement'),
+    utils = require('./utils');
 
 var roleBuilder = {
 
@@ -75,6 +76,8 @@ var roleBuilder = {
                 }
             }
         } else {
+            utils.creep.getEnergy();
+            /*
             if (roomMemory.storageWithEnergy.length > 0) {
                 // Take energy from storage units first
                 const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
@@ -88,6 +91,7 @@ var roleBuilder = {
                     movement.toDest(creep, closestSource);
                 }
             }
+            */
         }
     }
 };
