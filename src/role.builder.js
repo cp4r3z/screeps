@@ -1,5 +1,4 @@
-const roleHarvester = require('./role.harvester'),
-    utils = require('./utils');
+const roleHarvester = require('./role.harvester');
 
 var roleBuilder = {
 
@@ -55,7 +54,7 @@ var roleBuilder = {
             const target = creep.pos.findClosestByPath(roomMemory.constructionSites);
             if (target) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
-                    utils.movement.toDest(creep, target);
+                    base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
             } else {
@@ -68,7 +67,7 @@ var roleBuilder = {
                     targets = targets.sort((a, b) => a.hits - b.hits);
                     // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
                     if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                        utils.movement.toDest(creep, targets[0]);
+                        base.utils.movement.toDest(creep, targets[0]);
                     }
                 } else {
                     //Nothing to do nowhere to go? Go harvest something.

@@ -1,3 +1,5 @@
+const utils = require('./utils');
+
 module.exports = (creep, roomMemory) => {
     return {
         test() {
@@ -9,16 +11,17 @@ module.exports = (creep, roomMemory) => {
                 // Take energy from storage units first
                 const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
                 if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, storage);
+                    utils.movement.toDest(creep, storage);
                 }
             } else {
                 // Otherwise, harvest the energy from the nearest source
                 const closestSource = creep.pos.findClosestByPath(roomMemory.sourcesActive);
                 if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, closestSource);
+                    utils.movement.toDest(creep, closestSource);
                 }
             }
             // Get energy from storage or, failing that, harvest.
-        }
+        },
+        utils
     }
 };
