@@ -33,7 +33,7 @@ module.exports = {
         };
 
         status.isUnderAttack = status.hostiles.length > 0;
-        status.areActiveSources = status.sourcesActive > 0;
+        status.areActiveSources = status.sourcesActive.length > 0;
 
         _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
 
