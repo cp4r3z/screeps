@@ -8,6 +8,7 @@ var roleBuilder = {
         // Get the room status from memory
         const roomMemory = Memory.rooms[creep.room.name];
 
+        // Load the base creep module
         const base = require('./role.base')(creep, roomMemory);
 
         if (creep.memory.building && creep.carry.energy == 0) {
@@ -77,21 +78,6 @@ var roleBuilder = {
             }
         } else {
             base.getEnergy();
-            /*
-            if (roomMemory.storageWithEnergy.length > 0) {
-                // Take energy from storage units first
-                const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
-                if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, storage);
-                }
-            } else {
-                // Otherwise, harvest the energy from the nearest source
-                const closestSource = creep.pos.findClosestByPath(roomMemory.sourcesActive);
-                if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, closestSource);
-                }
-            }
-            */
         }
     }
 };
