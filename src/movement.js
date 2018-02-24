@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
     toDest(creep, dest) {
         // const pathFlags = {
         //     ignoreCreeps: true
@@ -19,7 +19,7 @@ module.export = {
             creep.say('Perdido');
         }
         */
-        
+
         //http://docs.screeps.com/api/#Creep.moveTo
         const retVal = creep.moveTo(dest);
         if (retVal != OK) {
