@@ -49,6 +49,18 @@ module.exports = {
             getMinWorker() {
                 return [WORK, CARRY, MOVE, MOVE]; // 250
             },
+            getMaxHarvester(){
+                const description = {
+                    // Ok, so the energy spawns every 300 ticks
+                    // Energy Amount = 3000 in an owned or reserved room
+                    // Creep lives for 1500 ticks
+                    // So... at least 2 WORK for max extraction
+                    m: 10,
+                    w: 6, // Spend about 1/3 life harvesting?
+                    c: 20
+                };
+                return this.list(description);
+            },
             getCreepDesc(energyCapacity, desc) {
                 if (energyCapacity <= 250) {
                     return this.getMinWorker();
