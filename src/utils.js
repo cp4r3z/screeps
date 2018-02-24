@@ -108,22 +108,6 @@ module.exports = {
                     return this.list(description);
                 }
             }
-        },
-        getEnergy(){
-            if (this.roomMemory.storageWithEnergy.length > 0) {
-                // Take energy from storage units first
-                const storage = this.creep.pos.findClosestByPath(this.roomMemory.storageWithEnergy);
-                if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(this.creep, storage);
-                }
-            } else {
-                // Otherwise, harvest the energy from the nearest source
-                const closestSource = this.creep.pos.findClosestByPath(this.roomMemory.sourcesActive);
-                if (this.creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(this.creep, closestSource);
-                }
-            }
-            // Get energy from storage or, failing that, harvest.
         }
     },
     movement
