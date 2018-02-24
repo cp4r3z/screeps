@@ -1,7 +1,5 @@
 var roleUpgrader = require('./role.upgrader');
 
-// Get the room status from memory
-const roomMemory = Memory.rooms[spawn.room.name];
 
 const pathFlags = {
     //ignoreCreeps: true,
@@ -12,6 +10,9 @@ var roleHarvester = {
 
     /** @param {Creep} creep **/
     run(creep) {
+
+        // Get the room status from memory
+        const roomMemory = Memory.rooms[creep.room.name];
 
         if (!creep.memory.harvesting && creep.carry.energy === 0) {
             creep.memory.harvesting = true;
@@ -47,7 +48,7 @@ var roleHarvester = {
                 source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
                 creep.memory.sourceId = source.id;
             }
-            
+
             if (creep.memory.sourceId) {
                 source = Game.getObjectById(creep.memory.sourceId);
                 if (source.energy === 0) setNewSource();

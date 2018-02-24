@@ -29,7 +29,7 @@ module.exports = {
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
             sources: Game.rooms[roomHash].find(FIND_SOURCES),
-            sourcesActive = Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE)
+            sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE)
         };
 
         status.isUnderAttack = status.hostiles.length > 0;
