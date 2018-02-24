@@ -21,9 +21,16 @@ module.exports = {
 
         let status = {
             constructionSites: Game.rooms[roomHash].find(FIND_MY_CONSTRUCTION_SITES),
+            storageWithEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                filter: (structure) =>
+                    (
+                        (structure.structureType == STRUCTURE_STORAGE && structure.store[RESOURCE_ENERGY] > 0) ||
+                        (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0)
+                    )
+            }),
             extensions: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                filter: (extension) => {
-                    return extension.structureType == STRUCTURE_EXTENSION;
+                filter: (structure) => {
+                    return structure.structureType == STRUCTURE_EXTENSION;
                 }
             }),
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),

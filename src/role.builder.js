@@ -1,9 +1,13 @@
-var roleHarvester = require('./role.harvester');
+const roleHarvester = require('./role.harvester'),
+    movement = require('./movement');
 
 var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+
+        // Get the room status from memory
+        const roomMemory = Memory.rooms[creep.room.name];
 
         if (creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
@@ -38,15 +42,6 @@ var roleBuilder = {
                 }
             }
 
-            const sources = [].concat(
-                creep.room.find(FIND_SOURCES_ACTIVE),
-                creep.room.find(FIND_MY_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_CONTAINER);
-                    }
-                })
-            );
             // This gets out of control.
             /*
                         for (let source of sources) {
@@ -55,46 +50,43 @@ var roleBuilder = {
                         }
             */
             //var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            const target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            const target = creep.pos.findClosestByPath(roomMemory.constructionSites);
             if (target) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' } });
+                    movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
-            }
-            else {
+            } else {
                 // Repair
-                let targets = creep.room.find(FIND_STRUCTURES, {
+                let targets = creep.room.find(FIND_MY_STRUCTURES, {
                     filter: object => object.hits < object.hitsMax
                 });
 
                 if (targets.length > 0) {
                     targets = targets.sort((a, b) => a.hits - b.hits);
+                    // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
                     if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(targets[0]);
+                        movement.toDest(creep, targets[0]);
                     }
-                }
-                else {
+                } else {
                     //Nothing to do nowhere to go? Go harvest something.
                     creep.say('harrrvest');
                     roleHarvester.run(creep);
                 }
             }
-        }
-        else {
-            // find nearest source (with energy)
-            // use findPath to sort
-            // !!! There's a native method for this.
-            var sources = creep.room.find(FIND_SOURCES, {
-                filter: (source) => {
-                    return source.energy > 0;
+        } else {
+            if (roomMemory.storageWithEnergy.length > 0) {
+                // Take energy from storage units first
+                const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
+                if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    movement.toDest(creep, storage);
                 }
-            });
-            var closestSource = sources.sort((sourceA, sourceB) => creep.room.findPath(creep.pos, sourceA.pos) - creep.room.findPath(creep.pos, sourceB.pos))[0];
-
-            if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                //console.log(`role.upgrader: ${creep.name} moving to ${closestSource}.`)
-                creep.moveTo(closestSource, { visualizePathStyle: { stroke: '#ffaa00' } });
+            } else {
+                // Otherwise, harvest the energy from the nearest source
+                const closestSource = creep.pos.findClosestByPath(roomMemory.sourcesActive);
+                if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
+                    movement.toDest(creep, closestSource);
+                }
             }
         }
     }
