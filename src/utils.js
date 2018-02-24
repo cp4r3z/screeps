@@ -61,6 +61,14 @@ module.exports = {
                 };
                 return this.list(description);
             },
+            getMaxBuilder(){
+                const description = {
+                    m: 6,
+                    w: 6,
+                    c: 6
+                };
+                return this.list(description);
+            },
             getCreepDesc(energyCapacity, desc) {
                 if (energyCapacity <= 250) {
                     return this.getMinWorker();

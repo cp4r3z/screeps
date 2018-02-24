@@ -3,7 +3,7 @@ const utils = require('./utils'),
 
 module.exports = (spawnName) => {
 
-    const spawn = Game.spawns[spawnName];    
+    const spawn = Game.spawns[spawnName];
 
     // Get the room status from memory
     const roomMemory = Memory.rooms[spawn.room.name];
@@ -87,7 +87,7 @@ module.exports = (spawnName) => {
                 totalCapacity = spawnCapacity;
             }
         }
-        const minHarvestersMineral = (extractors.length > 0) ? SPAWN_PROPS.harvestersMineral.min : 0;        
+        const minHarvestersMineral = (extractors.length > 0) ? SPAWN_PROPS.harvestersMineral.min : 0;
 
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = spawn.spawning,
@@ -119,7 +119,14 @@ module.exports = (spawnName) => {
 
             } else if (builders.length < minBuilder) {
                 newName = 'Builder' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
+                if (roomMemory.constructionSites.length === 0) {
+                    // No urgent construction
+                    if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
+                        spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
+                    }
+                } else {
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
+                }
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47') {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
