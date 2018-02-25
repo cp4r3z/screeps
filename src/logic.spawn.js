@@ -21,7 +21,7 @@ module.exports = (spawnName) => {
                 min: 1
             },
             builders: {
-                min: 2
+                min: (roomMemory.areConstructionSites || roomMemory.repairNeeded) ? 1 : 0
             },
             hunters: {
                 min: 2
@@ -80,7 +80,7 @@ module.exports = (spawnName) => {
         const scoutReservers = _.filter(Game.creeps, (creep) => creep.memory.role == 'scoutReserver');
 
         const extractors = spawn.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_EXTRACTOR });
-        const minBuilder = (roomMemory.constructionSites.length > 1) ? SPAWN_PROPS.builders.min : 1;
+        //const minBuilder = (roomMemory.constructionSites.length > 1 || roomMemory.repairNeeded) ? 1 : 0;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
         if (isWipedOut) {
             // Do not consider the extensions, as they probably won't be filled.
@@ -118,7 +118,7 @@ module.exports = (spawnName) => {
                 newName = 'Upgrader' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
 
-            } else if (builders.length < minBuilder) {
+            } else if (builders.length < SPAWN_PROPS.builders.min) {
                 newName = 'Builder' + Game.time;
                 if (roomMemory.constructionSites.length === 0) {
                     // No urgent construction

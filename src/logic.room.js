@@ -38,16 +38,19 @@ module.exports = {
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
             sources: Game.rooms[roomHash].find(FIND_SOURCES),
             sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE),
-            structuresNeedingRepair: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+            // WALLS aren't part of MY_STRUCTURES
+            structuresNeedingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
             }).sort((a, b) => a.hits - b.hits),
             terminalsWithCapacity: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_TERMINAL && _.sum(structure.store) < structure.storeCapacity })
         };
 
+        status.repairTotal = _.reduce(status.structuresNeedingRepair, (result, structure) => { return 1e6 - structure.hits }, 0);
+
         status.isUnderAttack = status.hostiles.length > 0;
         status.areActiveSources = status.sourcesActive.length > 0;
         status.areConstructionSites = status.constructionSites.length > 0;
-        status.repairNeeded = status.structuresNeedingRepair.length > 0;
+        status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (500 * 1500); // Avg repair/tick * life of creep ?
         status.areTerminalsNotAtCapacity = status.terminalsWithCapacity.length > 0;
 
         _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
