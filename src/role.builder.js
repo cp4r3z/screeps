@@ -52,25 +52,23 @@ var roleBuilder = {
                         }
             */
 
-            let target = creep.pos.findClosestByPath(roomMemory.constructionSites);
-            if (target) {
+            if (roomMemory.areConstructionSites) {
+                let target = creep.pos.findClosestByPath(roomMemory.constructionSites);
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
-            } else {
-                if (roomMemory.repairNeeded) {
-                    // Repair
-                    target = roomMemory.structuresNeedingRepair[0];
-                    // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
-                    if (creep.repair(target) == ERR_NOT_IN_RANGE) {
-                        base.utils.movement.toDest(creep, target);
-                    }
-                } else {
-                    //Nothing to do nowhere to go? Go harvest something.
-                    creep.say('harrrvest');
-                    roleHarvester.run(creep);
+            } else if (roomMemory.repairNeeded) {
+                // Repair
+                target = roomMemory.structuresNeedingRepair[0];
+                // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
+                if (creep.repair(target) == ERR_NOT_IN_RANGE) {
+                    base.utils.movement.toDest(creep, target);
                 }
+            } else {
+                //Nothing to do nowhere to go? Go harvest something.
+                creep.say('bored');
+                //roleHarvester.run(creep);
             }
         } else {
             base.getEnergy();

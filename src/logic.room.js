@@ -46,6 +46,7 @@ module.exports = {
 
         status.isUnderAttack = status.hostiles.length > 0;
         status.areActiveSources = status.sourcesActive.length > 0;
+        status.areConstructionSites = status.constructionSites.length > 0;
         status.repairNeeded = status.structuresNeedingRepair.length > 0;
         status.areTerminalsNotAtCapacity = status.terminalsWithCapacity.length > 0;
 
