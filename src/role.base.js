@@ -10,7 +10,7 @@ module.exports = (creep, roomMemory) => {
             if (roomMemory.storageWithEnergy.length > 0) {
                 // Take energy from storage units first
                 const storage = creep.pos.findClosestByPath(roomMemory.storageWithEnergy);
-                if (creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     utils.movement.toDest(creep, storage);
                 }
             } else {
