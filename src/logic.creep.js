@@ -22,5 +22,5 @@ module.exports = () => {
 
     const creepsRanked = _.sortBy(Game.creeps, [(creep) => rolesByRank.indexOf(Game.creeps[creep].memory.role)]);
 
-    _.forEach(creepsRanked, (creep) => role[creep.memory.role].run(creep));
+    _.forEach(creepsRanked, (creep) => { if (Game.cpu.getUsed() < Game.cpu.tickLimit) role[creep.memory.role].run(creep); });
 };
