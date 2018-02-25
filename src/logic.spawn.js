@@ -14,7 +14,8 @@ module.exports = (spawnName) => {
                 min: roomMemory.sources.length
             },
             upgraders: {
-                min: roomMemory.sources.length
+                min: 1
+                //min: roomMemory.sources.length
             },
             harvestersMineral: {
                 min: 1
