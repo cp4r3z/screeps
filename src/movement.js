@@ -25,7 +25,7 @@ module.exports = {
             reusePath: reusePath || 5 // Game default is 5
         };
 
-        const retVal = creep.moveTo(dest);
+        const retVal = creep.moveTo(dest, opts);
         if (retVal != OK) {
             console.log(`creep ${creep.name} | moveTo err: ${retVal}`);
         }
