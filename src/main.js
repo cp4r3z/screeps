@@ -13,7 +13,7 @@ module.exports.loop = function() {
 
     // DEBUG
 
-    Memory.DEBUG = true;
+    Memory.DEBUG = false;
 
     // ROOMS
 
