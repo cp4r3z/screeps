@@ -1,5 +1,4 @@
-const roleUpgrader = require('./role.upgrader'),
-    movement = require('./movement');
+const roleUpgrader = require('./role.upgrader');    
 
 const pathFlags = {
     //ignoreCreeps: true,
@@ -13,6 +12,9 @@ var roleHarvester = {
 
         // Get the room status from memory
         const roomMemory = Memory.rooms[creep.room.name];
+
+        // Load the base creep module
+        const base = require('./role.base')(creep, roomMemory);
 
         if (!creep.memory.harvesting && creep.carry.energy === 0) {
             creep.memory.harvesting = true;
@@ -29,7 +31,7 @@ var roleHarvester = {
             if (targets.length) {
                 const target = creep.pos.findClosestByPath(targets);
                 if (creep.pickup(target) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, target);
+                    base.utils.movement.toDest(creep, target);
                 }
 
             }
@@ -50,7 +52,7 @@ var roleHarvester = {
             } else setNewSource();
 
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                movement.toDest(creep, source);
+                base.utils.movement.toDest(creep, source);
             }
         }
 
@@ -81,7 +83,7 @@ var roleHarvester = {
             }
             if (target) {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    movement.toDest(creep, target);
+                    base.utils.movement.toDest(creep, target);
                 }
             } else {
                 //upgrade
