@@ -58,7 +58,7 @@ var roleHarvester = {
         }
         if (creep.memory.harvesting) {
             if (!pickupDroppedMinerals()) {
-                if (roomStatus.hasMineral) harvestSources();
+                if (roomMemory.hasMineral) harvestSources();
             }
         } else {
             let target;
