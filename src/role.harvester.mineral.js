@@ -52,7 +52,7 @@ var roleHarvester = {
             } else {
                 target = roomMemory.minerals[0]; // Assuming there's only one mineral available...
                 if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, target);
+                    base.utils.movement.toDest(creep, target, 20);
                 }
             }
         }
@@ -82,7 +82,7 @@ var roleHarvester = {
             if (target) {
                 _.each(creep.carry, (amount, cargo) => {
                     if (creep.transfer(target, cargo) == ERR_NOT_IN_RANGE) {
-                        base.utils.movement.toDest(creep, target);
+                        base.utils.movement.toDest(creep, target, 20);
                         //exit the each?
                     }
                 });
