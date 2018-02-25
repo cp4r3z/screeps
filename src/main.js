@@ -11,7 +11,13 @@ const CONFIG = require('./config'),
 
 module.exports.loop = function() {
 
+    // DEBUG
+
+    Memory.DEBUG = true;
+
     // ROOMS
+
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - Start Loop`);
 
     for (const room in Game.rooms) {
         logicRoom.planner(room);
@@ -24,11 +30,15 @@ module.exports.loop = function() {
         }
     }
 
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Room Logic`);
+
     // SPAWNS
 
     for (const spawn in Game.spawns) {
         logicSpawn(spawn);
     }
+
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Spawn Logic`);
 
     // CREEPS
 
@@ -46,7 +56,11 @@ module.exports.loop = function() {
         }
     }
 
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Creep Logic`);
+
     // MARKET
 
     logicMarket();
+
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Market Logic`);
 }
