@@ -42,8 +42,10 @@ var roleHarvester = {
             let source;
 
             function setNewSource() {
-                source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                creep.memory.sourceId = source.id;
+                if(roomMemory.areActiveSources){
+                    source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                    creep.memory.sourceId = source.id;
+                }
             }
 
             if (creep.memory.sourceId) {

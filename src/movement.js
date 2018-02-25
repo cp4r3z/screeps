@@ -1,5 +1,5 @@
 module.exports = {
-    toDest(creep, dest, reusePath) {
+    toDest(creep, dest, reusePathAmount) {
         // const pathFlags = {
         //     ignoreCreeps: true
         // };
@@ -22,13 +22,12 @@ module.exports = {
 
         //http://docs.screeps.com/api/#Creep.moveTo
         const opts = {
-            reusePath: reusePath || 5 // Game default is 5
+            reusePath: reusePathAmount || 5 // Game default is 5
         };
 
         const retVal = creep.moveTo(dest, opts);
         if (retVal != OK) {
             console.log(`creep ${creep.name} | moveTo err: ${retVal}`);
         }
-
     }
 };
