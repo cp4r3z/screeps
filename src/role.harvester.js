@@ -1,4 +1,4 @@
-const roleUpgrader = require('./role.upgrader');    
+const roleUpgrader = require('./role.upgrader');
 
 const pathFlags = {
     //ignoreCreeps: true,
@@ -42,7 +42,7 @@ var roleHarvester = {
             let source;
 
             function setNewSource() {
-                if(roomMemory.areActiveSources){
+                if (roomMemory.areActiveSources) {
                     source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
                     creep.memory.sourceId = source.id;
                 }
@@ -79,7 +79,8 @@ var roleHarvester = {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity) ||
                             (structure.structureType == STRUCTURE_TERMINAL && structure.store[RESOURCE_ENERGY] < 3000) || // I have no idea
-                            (structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity);
+                            (structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity) ||
+                            (structure.structureType == STRUCTURE_STORAGE && _.sum(structure.store) < structure.storeCapacity);
                     }
                 });
             }
