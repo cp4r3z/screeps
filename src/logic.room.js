@@ -39,7 +39,7 @@ module.exports = {
             sources: Game.rooms[roomHash].find(FIND_SOURCES),
             sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE),
             structuresNeedingRepair: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                filter: object => object.hits < object.hitsMax && object.hits < 1e5 // arbitrary "max"
+                filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
             }).sort((a, b) => a.hits - b.hits),
             terminalsWithCapacity: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_TERMINAL && _.sum(structure.store) < structure.storeCapacity })
         };

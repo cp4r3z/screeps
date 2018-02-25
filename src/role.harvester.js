@@ -78,8 +78,14 @@ var roleHarvester = {
                 target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity) ||
-                            (structure.structureType == STRUCTURE_TERMINAL && structure.store[RESOURCE_ENERGY] < 3000) || // I have no idea
-                            (structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity) ||
+                            (structure.structureType == STRUCTURE_TERMINAL && structure.store[RESOURCE_ENERGY] < 3000); // I have no idea what this needs.                            
+                    }
+                });
+            }
+            if (!target) {
+                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity) ||
                             (structure.structureType == STRUCTURE_STORAGE && _.sum(structure.store) < structure.storeCapacity);
                     }
                 });
