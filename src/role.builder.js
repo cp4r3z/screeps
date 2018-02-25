@@ -51,24 +51,20 @@ var roleBuilder = {
                             buildRoad(creep.room.controller.pos, source.pos);
                         }
             */
-            //var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            const target = creep.pos.findClosestByPath(roomMemory.constructionSites);
+
+            let target = creep.pos.findClosestByPath(roomMemory.constructionSites);
             if (target) {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
             } else {
-                // Repair
-                let targets = creep.room.find(FIND_MY_STRUCTURES, {
-                    filter: object => object.hits < object.hitsMax
-                });
-
-                if (targets.length > 0) {
-                    targets = targets.sort((a, b) => a.hits - b.hits);
+                if (roomMemory.repairNeeded) {
+                    // Repair
+                    target = roomMemory.structuresNeedingRepair[0];
                     // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
-                    if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                        base.utils.movement.toDest(creep, targets[0]);
+                    if (creep.repair(target) == ERR_NOT_IN_RANGE) {
+                        base.utils.movement.toDest(creep, target);
                     }
                 } else {
                     //Nothing to do nowhere to go? Go harvest something.
