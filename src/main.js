@@ -17,7 +17,7 @@ module.exports.loop = function() {
 
     // ROOMS
 
-    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - Start Loop`);
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket}, Game.cpu.getUsed(): ${Game.cpu.getUsed()} - Start Loop`);
 
     for (const room in Game.rooms) {
         logicRoom.planner(room);
@@ -30,7 +30,7 @@ module.exports.loop = function() {
         }
     }
 
-    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Room Logic`);
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket}, Game.cpu.getUsed(): ${Game.cpu.getUsed()} - After Room Logic`);
 
     // SPAWNS
 
@@ -38,7 +38,7 @@ module.exports.loop = function() {
         logicSpawn(spawn);
     }
 
-    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Spawn Logic`);
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket}, Game.cpu.getUsed(): ${Game.cpu.getUsed()} - After Spawn Logic`);
 
     // CREEPS
 
@@ -56,11 +56,11 @@ module.exports.loop = function() {
         }
     }
 
-    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Creep Logic`);
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket}, Game.cpu.getUsed(): ${Game.cpu.getUsed()} - After Creep Logic`);
 
     // MARKET
 
     logicMarket();
 
-    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket} - After Market Logic`);
+    if (Memory.DEBUG) console.log(`Game.cpu.bucket: ${Game.cpu.bucket}, Game.cpu.getUsed(): ${Game.cpu.getUsed()} - After Market Logic`);
 }
