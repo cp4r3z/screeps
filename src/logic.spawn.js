@@ -15,7 +15,7 @@ module.exports = (spawnName) => {
             },
             upgraders: {
                 min: 1
-                //min: roomMemory.sources.length
+                    //min: roomMemory.sources.length
             },
             harvestersMineral: {
                 min: 1
@@ -79,6 +79,9 @@ module.exports = (spawnName) => {
         // Find the scout reserver, regardless of room.
         const scoutReservers = _.filter(Game.creeps, (creep) => creep.memory.role == 'scoutReserver');
 
+        // Find remote harvesters, regardless of room.
+        const remoteHarvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvesterRemote');
+
         const extractors = spawn.room.find(FIND_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_EXTRACTOR });
         //const minBuilder = (roomMemory.constructionSites.length > 1 || roomMemory.repairNeeded) ? 1 : 0;
         const isWipedOut = harvesters.length === 0 || upgraders.length === 0;
@@ -131,7 +134,7 @@ module.exports = (spawnName) => {
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47') {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
-            } else if (isAtCapacity) {
+            } else if (remoteHarvesters.length <= 3 && isAtCapacity) {
                 newName = 'HarvesterRemote' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
             } else {
