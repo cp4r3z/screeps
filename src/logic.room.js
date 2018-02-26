@@ -22,6 +22,7 @@ module.exports = {
         let status = {
             constructionSites: Game.rooms[roomHash].find(FIND_MY_CONSTRUCTION_SITES),
             storageOnly: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_STORAGE }), // what about containers?
+            storageWithCapacity: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, { filter: structure => (structure.structureType == STRUCTURE_CONTAINER || structure.structureType == STRUCTURE_STORAGE) && _.sum(structure.store) < structure.storeCapacity }),
             storageWithEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
                 filter: (structure) =>
                     (

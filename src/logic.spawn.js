@@ -131,6 +131,9 @@ module.exports = (spawnName) => {
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47') {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
+            } else if (isAtCapacity) {
+                newName = 'HarvesterRemote' + Game.time;
+                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
