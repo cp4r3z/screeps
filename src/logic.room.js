@@ -51,7 +51,7 @@ module.exports = {
         status.isUnderAttack = status.hostiles.length > 0;
         status.areActiveSources = status.sourcesActive.length > 0;
         status.areConstructionSites = status.constructionSites.length > 0;
-        status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (500 * 1500); // Avg repair/tick * life of creep ?
+        status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (20 * 1500); // Avg repair/tick * life of creep ?
         status.areTerminalsNotAtCapacity = status.terminalsWithCapacity.length > 0;
 
         _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
