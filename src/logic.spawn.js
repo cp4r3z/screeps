@@ -101,15 +101,12 @@ module.exports = (spawnName) => {
         if (shouldSpawn) {
             let newName;
             // This Under Attack logic could produce non-ideal attackers.
-            if (roomMemory.isUnderAttack) {
+            if (roomMemory.isUnderAttack && killers.length < SPAWN_PROPS.hunters.min) {
                 // Hey we're under attack. Yay.
 
-                Game.notify(`UNDER ATTACK`);
-                if (killers.length < SPAWN_PROPS.hunters.min) {
-                    newName = 'Killer' + Game.time;
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
-                }
-
+                //Game.notify(`UNDER ATTACK`);
+                newName = 'Killer' + Game.time;
+                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
