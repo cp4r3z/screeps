@@ -24,7 +24,7 @@ module.exports = (spawnName) => {
                 min: (roomMemory.areConstructionSites || roomMemory.repairNeeded) ? 1 : 0
             },
             hunters: {
-                min: 2
+                min: roomMemory.hostiles.length
             }
         },
         CREEP_PROPS = {
