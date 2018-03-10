@@ -11,10 +11,14 @@ var roleBuilder = {
         // Load the base creep module
         const base = require('./role.base')(creep, roomMemory);
 
+        // Repeat Action Ticks
+        const repeatInterval = 15;
+
         if (creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
             creep.say('harvesting');
         }
+
         if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
             creep.memory.building = true;
             creep.say('building');
@@ -51,17 +55,32 @@ var roleBuilder = {
                             buildRoad(creep.room.controller.pos, source.pos);
                         }
             */
-
+            let target;
             if (roomMemory.areConstructionSites) {
-                let target = creep.pos.findClosestByPath(roomMemory.constructionSites);
+                // How to make this "repeating" into a function...
+                if (creep.memory.repeatUntil > Game.time) {
+                    target = creep.memory.target;
+                } else {
+                    target = creep.pos.findClosestByPath(roomMemory.constructionSites);
+                    creep.memory.target = target;
+                    creep.memory.repeatUntil = Game.time + repeatInterval;
+                }
+
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
             } else if (roomMemory.structuresNeedingRepair.length > 0) {
+                // Choose Target
+                if (creep.memory.repeatUntil > Game.time) {
+                    target = creep.memory.target;
+                } else {
+                    target = roomMemory.structuresNeedingRepair[0];
+                    creep.memory.target = target;
+                    creep.memory.repeatUntil = Game.time + repeatInterval;
+                }
+
                 // Repair
-                target = roomMemory.structuresNeedingRepair[0];
-                // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
                 }
