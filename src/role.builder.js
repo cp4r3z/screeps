@@ -59,10 +59,10 @@ var roleBuilder = {
             if (roomMemory.areConstructionSites) {
                 // How to make this "repeating" into a function...
                 if (creep.memory.repeatUntil > Game.time) {
-                    target = creep.memory.target;
+                    target = Game.getObjectById(creep.memory.targetID);
                 } else {
                     target = creep.pos.findClosestByPath(roomMemory.constructionSites);
-                    creep.memory.target = target;
+                    creep.memory.targetID = target.id;
                     creep.memory.repeatUntil = Game.time + repeatInterval;
                 }
 
@@ -73,10 +73,10 @@ var roleBuilder = {
             } else if (roomMemory.structuresNeedingRepair.length > 0) {
                 // Choose Target
                 if (creep.memory.repeatUntil > Game.time) {
-                    target = creep.memory.target;
+                    target = Game.getObjectById(creep.memory.targetID);
                 } else {
                     target = roomMemory.structuresNeedingRepair[0];
-                    creep.memory.target = target;
+                    creep.memory.targetID = target.id;
                     creep.memory.repeatUntil = Game.time + repeatInterval;
                 }
 
