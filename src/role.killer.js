@@ -7,7 +7,7 @@ var roleKiller = {
         if (target) {
             let hasRangedAttack = false;
             _.each(creep.body, part => {
-                if (_.includes(part, ATTACK)) { hasRangedAttack = true; }
+                if (_.includes(part, RANGED_ATTACK)) { hasRangedAttack = true; }
             })
             if (hasRangedAttack) {
                 if (creep.rangedAttack(target) == ERR_NOT_IN_RANGE) {
