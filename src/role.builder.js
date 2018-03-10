@@ -58,7 +58,7 @@ var roleBuilder = {
                     base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
-            } else if (roomMemory.repairNeeded) {
+            } else if (roomMemory.structuresNeedingRepair.length > 0) {
                 // Repair
                 target = roomMemory.structuresNeedingRepair[0];
                 // I think this wastes time. The creep should probably "linger" for awhile before moving on to another target.
