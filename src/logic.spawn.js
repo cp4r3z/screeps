@@ -32,7 +32,8 @@ module.exports = (spawnName) => {
             parts: {
                 worker: { m: 2, w: 1, c: 1 },
                 slow_worker: { m: 1, w: 1, c: 1 },
-                killer: { m: 2, t: 1, a: 1 }
+                killer: { m: 2, t: 1, a: 1 },
+                killer2: { m: 2, t: 1, r: 1 },
             }
 
         };
@@ -106,7 +107,7 @@ module.exports = (spawnName) => {
                 Game.notify(`UNDER ATTACK`);
                 if (killers.length < SPAWN_PROPS.hunters.min) {
                     newName = 'Killer' + Game.time;
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'killer' } });
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
                 }
 
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
