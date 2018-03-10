@@ -115,9 +115,6 @@ module.exports = (spawnName) => {
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
                 }
-            } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral) {
-                newName = 'HarvesterMineral' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
                 newName = 'Upgrader' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
@@ -132,6 +129,9 @@ module.exports = (spawnName) => {
                 } else {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
                 }
+            } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral) {
+                newName = 'HarvesterMineral' + Game.time;
+                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47') {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
