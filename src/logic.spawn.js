@@ -115,13 +115,13 @@ module.exports = (spawnName) => {
                 } else {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
                 }
-            } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral) {
+            } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterMineral' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
-            } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47') {
+            } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47' && Game.cpu.bucket > 5000) {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
-            } else if (remoteHarvesters.length <= 3 && isAtCapacity) {
+            } else if (remoteHarvesters.length <= 3 && isAtCapacity && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterRemote' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
             } else {
