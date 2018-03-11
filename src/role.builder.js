@@ -48,6 +48,13 @@ var roleBuilder = {
                 }
             }
 
+            const nextStructureNeedingRepair = function() {
+                const target = roomMemory.structuresNeedingRepair[0];
+                creep.memory.targetID = target.id;
+                creep.memory.repeatUntil = Game.time + repeatInterval;
+                return target;
+            };
+
             // This gets out of control.
             /*
                         for (let source of sources) {
@@ -74,10 +81,11 @@ var roleBuilder = {
                 // Choose Target
                 if (creep.memory.repeatUntil > Game.time) {
                     target = Game.getObjectById(creep.memory.targetID);
+                    if (target.hits == target.hitsMax) {
+                        target = nextStructureNeedingRepair();
+                    }
                 } else {
-                    target = roomMemory.structuresNeedingRepair[0];
-                    creep.memory.targetID = target.id;
-                    creep.memory.repeatUntil = Game.time + repeatInterval;
+                    target = nextStructureNeedingRepair();
                 }
 
                 // Repair
