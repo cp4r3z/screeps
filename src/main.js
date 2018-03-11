@@ -42,7 +42,7 @@ module.exports.loop = function() {
         logicSpawn(spawn);
     }
 
-    if (Memory.DEBUG) cpuUsage.push({ step: 'Spawn Logic', cpu: Game.cpu.getUsed() });;
+    if (Memory.DEBUG) cpuUsage.push({ step: 'Spawn Logic', cpu: Game.cpu.getUsed() });
 
     // CREEPS
 
@@ -68,11 +68,11 @@ module.exports.loop = function() {
 
     const logicTower = require('./logic.tower');
 
-    for (const room in Game.rooms) {
-        Game.rooms[room]
-        .find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } })
-        .map(logicTower);
-    }
+    _.each(Game.rooms, room => {
+        room
+            .find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } })
+            .map(logicTower);
+    });
 
     if (Memory.DEBUG) cpuUsage.push({ step: 'Tower Logic', cpu: Game.cpu.getUsed() });
 
