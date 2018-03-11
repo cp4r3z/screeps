@@ -1,5 +1,4 @@
-const utils = require('./utils'),
-    logicTower = require('./logic.tower');
+const utils = require('./utils');
 
 module.exports = (spawnName) => {
 
@@ -48,17 +47,7 @@ module.exports = (spawnName) => {
         spawnCapacity = spawn.energyCapacity;
     let totalCapacity = spawnCapacity + extensions.reduce((total, extension) => total + extension.energyCapacity, 0);
 
-
-    // Uncomment this to see the total energy available for spawning. I need a debug module.
-    //console.log(`Spawn: ${spawnName}, Total Energy: ${totalEnergy}/${totalCapacity}`);
-
-    // TOWER LOGIC -- this can be its own thing
-
-    const hostiles = spawn.room.find(FIND_HOSTILE_CREEPS);
-
-    spawn.room
-        .find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } })
-        .map(logicTower);
+    if (Memory.DEBUG) console.log(`Spawn: ${spawnName}, Total Energy: ${totalEnergy}/${totalCapacity}`);
 
     if (spawn.spawning) {
         const spawningCreep = Game.creeps[spawn.spawning.name];
@@ -107,7 +96,7 @@ module.exports = (spawnName) => {
                 //Game.notify(`UNDER ATTACK`);
                 newName = 'Killer' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
-            } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
+            } else if (harvesters.length < SPAWN_PROPS.harvesters.min && roomMemory.areActiveSources) {
                 newName = 'Harvester' + Game.time;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });

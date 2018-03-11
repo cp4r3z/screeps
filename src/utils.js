@@ -57,8 +57,10 @@ module.exports = {
                     // Energy Amount = 3000 in an owned or reserved room
                     // Creep lives for 1500 ticks
                     // So... at least 2 WORK for max extraction
-                    m: 10,
-                    w: 6, // Spend about 1/3 life harvesting?
+                    // Spend about 1/3 life harvesting? Ugh. Who knows.
+                    // But movement should be over roads... which decrease movement cost to 1
+                    m: 5,
+                    w: 10, 
                     c: 20
                 };
                 return this.list(description);

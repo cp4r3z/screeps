@@ -2,26 +2,22 @@
  * This space intentionally left blank.
  */
 
-const CONFIG = require('./config'),
-    utils = require('./utils'),
-    logicCreep = require('./logic.creep'),
-    logicRoom = require('./logic.room'),
-    logicMarket = require('./logic.market'),
-    logicSpawn = require('./logic.spawn');
-
 module.exports.loop = function() {
 
     // DEBUG
 
     Memory.DEBUG = false;
+    //Memory.DEBUG = true;
 
     if (Memory.DEBUG) console.log(`CPU Bucket: ${Game.cpu.bucket}`);
 
-    if (Game.cpu.bucket < 20) return;
+    if (Game.cpu.bucket < 50) return;
 
     let cpuUsage = [{ step: '0', cpu: 0 }];
 
     // ROOMS
+
+    const logicRoom = require('./logic.room');
 
     if (Memory.DEBUG) cpuUsage.push({ step: 'Loop Start', cpu: Game.cpu.getUsed() });
 
@@ -40,6 +36,8 @@ module.exports.loop = function() {
 
     // SPAWNS
 
+    const logicSpawn = require('./logic.spawn');
+
     for (const spawn in Game.spawns) {
         logicSpawn(spawn);
     }
@@ -47,6 +45,8 @@ module.exports.loop = function() {
     if (Memory.DEBUG) cpuUsage.push({ step: 'Spawn Logic', cpu: Game.cpu.getUsed() });;
 
     // CREEPS
+
+    const logicCreep = require('./logic.creep');
 
     logicCreep();
 
@@ -63,13 +63,27 @@ module.exports.loop = function() {
     }
 
     if (Memory.DEBUG) cpuUsage.push({ step: 'Creep Logic', cpu: Game.cpu.getUsed() });
-    
+
+    // TOWERS
+
+    const logicTower = require('./logic.tower');
+
+    for (const room in Game.rooms) {
+        Game.rooms[room]
+        .find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } })
+        .map(logicTower);
+    }
+
+    if (Memory.DEBUG) cpuUsage.push({ step: 'Tower Logic', cpu: Game.cpu.getUsed() });
+
     // MARKET
+
+    const logicMarket = require('./logic.market');
 
     logicMarket();
 
     if (Memory.DEBUG) cpuUsage.push({ step: 'Market Logic', cpu: Game.cpu.getUsed() });
-    
+
     if (Memory.DEBUG) {
         _.each(cpuUsage, (usage, i, col) => {
             if (i > 0) console.log(`CPU Used: ${(usage.cpu - col[i-1].cpu).toFixed(2)} for ${usage.step}`)
