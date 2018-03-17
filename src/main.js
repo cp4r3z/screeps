@@ -13,7 +13,7 @@ module.exports.loop = function() {
 
     if (Memory.DEBUG) console.log(`CPU Bucket: ${Game.cpu.bucket}`);
 
-    if (Game.cpu.bucket < 50) return;
+    if (Game.cpu.bucket < 100) return;
 
     let cpuUsage = [{ step: '0', cpu: 0 }];
 
