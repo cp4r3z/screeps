@@ -67,7 +67,7 @@ var roleHarvester = {
             }
         } else {
             // Start by filling extensions and spawns
-            let target = creep.pos.findClosestByPath(_.concat(
+            let target = creep.pos.findClosestByPath(_.union(
                 roomMemory.spawns.needingEnergy,
                 roomMemory.extensions.needingEnergy
             ));
