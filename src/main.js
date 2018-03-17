@@ -9,11 +9,21 @@ module.exports.loop = function() {
     Memory.DEBUG = false;
     //Memory.DEBUG = true;
 
+    // CPU Saver
+
     if (Memory.DEBUG) console.log(`CPU Bucket: ${Game.cpu.bucket}`);
 
     if (Game.cpu.bucket < 50) return;
 
     let cpuUsage = [{ step: '0', cpu: 0 }];
+
+    // Only execute the callback every n ticks
+    const intervalRun = function(runAgainInterval, memRoot, cb) {
+        if (Game.time >= memRoot.runAgainAt) {
+            memRoot.runAgainAt = Game.time + runAgainInterval;
+            cb();
+        }
+    };
 
     // ROOMS
 
@@ -78,15 +88,21 @@ module.exports.loop = function() {
 
     // MARKET
 
-    const logicMarket = require('./logic.market');
+    if (!Memory.market) Memory.market = {};
 
-    logicMarket();
+    intervalRun(50, Memory.market, function() {
+        const logicMarket = require('./logic.market');
 
-    if (Memory.DEBUG) cpuUsage.push({ step: 'Market Logic', cpu: Game.cpu.getUsed() });
+        logicMarket();
+
+        if (Memory.DEBUG) cpuUsage.push({ step: 'Market Logic', cpu: Game.cpu.getUsed() });
+    });
+
+    // CPU Report
 
     if (Memory.DEBUG) {
         _.each(cpuUsage, (usage, i, col) => {
             if (i > 0) console.log(`CPU Used: ${(usage.cpu - col[i-1].cpu).toFixed(2)} for ${usage.step}`)
         });
     }
-}
+};
