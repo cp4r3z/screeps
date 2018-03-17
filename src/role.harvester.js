@@ -73,14 +73,8 @@ var roleHarvester = {
             ));
 
             // Then, if that's all done, fill other stuff
-            if (!target) {
-                target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity) ||
-                            (structure.structureType == STRUCTURE_TERMINAL && structure.store[RESOURCE_ENERGY] < 3000); // I have no idea what this needs.                            
-                    }
-                });
-            }
+            if (!target) target = creep.pos.findClosestByPath(roomMemory.terminals.needingEnergy);
+            if (!target) target = creep.pos.findClosestByPath(roomMemory.towers.needingEnergy);
             if (!target) {
                 target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: (structure) => {
