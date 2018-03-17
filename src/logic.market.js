@@ -58,37 +58,36 @@ module.exports = () => {
         // Math.ceil( amount * ( 1 - Math.exp(-distanceBetweenRooms/30) ) )
 
         _.each(terminal.store, (amount, resource) => {
-            // Determine if the resource is found in the sell array above.
-            const shouldSell = _.find(orders.sell, { resource: resource });
+            // Escape if the resource is not found in the sell array above.
+            if (!_.find(orders.sell, { resource: resource })) return;
 
-            const hasResource = terminal.store[resource] > resourceThreshold;
-            if (hasResource && shouldSell) {
-                const totalAmount = resourceThreshold;
-                const existingOrders = _.filter(roomOrders, {
-                    resourceType: resource
-                });
-                const orderKeys = _.keys(existingOrders);
-                if (orderKeys.length == 1) {
-                    if (existingOrders[orderKeys[0]].active) {
-                        //console.log(`market: Already an active order`);
-                        // Maybe lower the price after some time?
-                    } else {
-                        //Extend an inactive order
-                        const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold); //TODO: // Figure out the "going rate"
-                        if (rc === 0) {
-                            console.log(`market: Extended order ${existingOrders[orderKeys[0]].id} by ${resourceThreshold} at ${resource.price} credits.`);
-                        } else {
-                            console.log(`market: Failed to extend order. Error code: ${rc}`);
-                        }
-                    }
+            // Escape if there aren't enough of that resource.
+            if (terminal.store[resource] < resourceThreshold) return;
+
+            const existingOrders = _.filter(roomOrders, {
+                resourceType: resource
+            });
+            const orderKeys = _.keys(existingOrders);
+            if (orderKeys.length == 1) {
+                if (existingOrders[orderKeys[0]].active) {
+                    //console.log(`market: Already an active order`);
+                    // Maybe lower the price after some time?
                 } else {
-                    if (orderKeys.length > 1) {
-                        Game.notify(`market: Multiple orders for ${resource}.`);
+                    //Extend an inactive order
+                    const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold); //TODO: // Figure out the "going rate"
+                    if (rc === 0) {
+                        console.log(`market: Extended order ${existingOrders[orderKeys[0]].id} by ${resourceThreshold} at ${resource.price} credits.`);
+                    } else {
+                        console.log(`market: Failed to extend order. Error code: ${rc}`);
                     }
-                    // Maybe we need to create an order...
-                    const marketResult = "fix market"; //Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, price, totalAmount, roomName);
-                    console.log(marketResult);
                 }
+            } else {
+                if (orderKeys.length > 1) {
+                    Game.notify(`market: Multiple orders for ${resource}.`);
+                }
+                // Maybe we need to create an order...
+                const marketResult = "fix market"; //Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, price, totalAmount, roomName);
+                console.log(marketResult);
             }
         });
 
