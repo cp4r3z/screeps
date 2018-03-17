@@ -8,7 +8,7 @@ module.exports = (tower) => {
             tower.attack(closestHostile);
         } else {
             if (tower.energy > 100) {
-                const closestDamagedStructure = tower.pos.findClosestByRange(structuresNeedingRepair);
+                const closestDamagedStructure = tower.pos.findClosestByRange(roomStatus.structuresNeedingRepair);
                 if (closestDamagedStructure) {
                     tower.repair(closestDamagedStructure);
                 }
