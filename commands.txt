@@ -72,7 +72,8 @@ storage.db['rooms.objects'].find({$and: [{room: 'W1N1'}, {type: 'creep'}]});
 // Remove an object by its id
 storage.db['rooms.objects'].removeWhere({_id: "abcdef"});
 
-Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, 0.75, 2750, "W13N46");
+Game.market.createOrder(ORDER_SELL, RESOURCE_ZYNTHIUM, 0.75, 2750, "E13N46");
+Game.market.createOrder(ORDER_SELL, RESOURCE_KEANIUM, 0.45, 2750, "E13N47");
 
 Game.market.deal('5a63746997377d1290cc9625', 2750, "E13N46");
 

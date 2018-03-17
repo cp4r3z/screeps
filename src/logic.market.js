@@ -4,15 +4,20 @@ module.exports = () => {
     // Do we want this? Maybe store it in memory or the config? Maybe we don't need it!
     const orders = {
         sell: [{
-            resource: RESOURCE_ZYNTHIUM,
-            id: '5a6d3a3ef5f6d20591fcdb27'
-        }],
+                resource: RESOURCE_ZYNTHIUM,
+                id: '5a6d3a3ef5f6d20591fcdb27',
+                price: .75
+            },
+            {
+                resource: RESOURCE_KEANIUM,
+                id: '5aad3c647b053203bae7ea05',
+                price: .45
+            }
+        ],
         buy: {
 
         }
     };
-
-
 
     function sales(roomName) {
 
@@ -58,7 +63,6 @@ module.exports = () => {
 
             const hasResource = terminal.store[resource] > resourceThreshold;
             if (hasResource && shouldSell) {
-                const price = 0.75; // Figure out the "going rate"
                 const totalAmount = resourceThreshold;
                 const existingOrders = _.filter(roomOrders, {
                     resourceType: resource
@@ -70,9 +74,9 @@ module.exports = () => {
                         // Maybe lower the price after some time?
                     } else {
                         //Extend an inactive order
-                        const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold);
+                        const rc = Game.market.extendOrder(existingOrders[orderKeys[0]].id, resourceThreshold); //TODO: // Figure out the "going rate"
                         if (rc === 0) {
-                            console.log(`market: Extended order ${existingOrders[orderKeys[0]].id} by ${resourceThreshold} at ${price} credits.`);
+                            console.log(`market: Extended order ${existingOrders[orderKeys[0]].id} by ${resourceThreshold} at ${resource.price} credits.`);
                         } else {
                             console.log(`market: Failed to extend order. Error code: ${rc}`);
                         }
