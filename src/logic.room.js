@@ -32,7 +32,7 @@ module.exports = {
             }),
             extensions: {
                 all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                    filter: structure => structure.structureType == STRUCTURE_EXTENSION
+                    filter: structure => { return structure.structureType == STRUCTURE_EXTENSION; }
                 })
             },
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
@@ -41,7 +41,7 @@ module.exports = {
             sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE),
             spawns: {
                 all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                    filter: structure => structure.structureType == STRUCTURE_SPAWN
+                    filter: structure => { return structure.structureType == STRUCTURE_SPAWN; }
                 })
             },
             // WALLS aren't part of MY_STRUCTURES
