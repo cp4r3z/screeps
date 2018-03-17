@@ -30,21 +30,29 @@ module.exports = {
                         (structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0)
                     )
             }),
-            extensions: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                filter: (structure) => {
-                    return structure.structureType == STRUCTURE_EXTENSION;
-                }
-            }),
+            extensions: {
+                all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                    filter: structure => structure.structureType == STRUCTURE_EXTENSION
+                })
+            },
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
             sources: Game.rooms[roomHash].find(FIND_SOURCES),
             sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE),
+            spawns: {
+                all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                    filter: structure => structure.structureType == STRUCTURE_SPAWN
+                })
+            },
             // WALLS aren't part of MY_STRUCTURES
             structuresNeedingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
             }).sort((a, b) => a.hits - b.hits),
             terminalsWithCapacity: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, { filter: structure => structure.structureType == STRUCTURE_TERMINAL && _.sum(structure.store) < structure.storeCapacity })
         };
+
+        status.extensions.needingEnergy = _.filter(status.extensions.all, structure => structure.energy < structure.energyCapacity);
+        status.spawns.needingEnergy = _.filter(status.spawns.all, structure => structure.energy < structure.energyCapacity);
 
         status.repairTotal = _.reduce(status.structuresNeedingRepair, (result, structure) => { return 1e6 - structure.hits }, 0);
 
