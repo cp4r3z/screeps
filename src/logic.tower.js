@@ -7,11 +7,11 @@ module.exports = (tower) => {
             const closestHostile = tower.pos.findClosestByRange(roomStatus.hostiles);
             tower.attack(closestHostile);
         } else {
-            const closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax && structure.hits < 1e5 // Um, this should probably be thought about.
-            });
-            if (closestDamagedStructure) {
-                tower.repair(closestDamagedStructure);
+            if (tower.energy > 100) {
+                const closestDamagedStructure = tower.pos.findClosestByRange(structuresNeedingRepair);
+                if (closestDamagedStructure) {
+                    tower.repair(closestDamagedStructure);
+                }
             }
         }
     }
