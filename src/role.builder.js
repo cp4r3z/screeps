@@ -95,7 +95,7 @@ var roleBuilder = {
             } else {
                 //Nothing to do nowhere to go? Go harvest something.
                 creep.say('bored');
-                //roleHarvester.run(creep);
+                roleHarvester.run(creep);
             }
         } else {
             base.getEnergy();
