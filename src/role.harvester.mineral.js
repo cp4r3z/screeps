@@ -67,7 +67,7 @@ var roleHarvester = {
 
             // Fill terminals that aren't full.
             if (roomMemory.areTerminalsNotAtCapacity) {
-                target = roomMemory.terminalsWithCapacity[0];
+                target = roomMemory.terminals.withCapacity[0];
             } else {
                 // Fill extensions and spawns
                 const storages = roomMemory.storageOnly;
