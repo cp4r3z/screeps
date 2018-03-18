@@ -76,9 +76,7 @@ module.exports = {
 
         _.each(status.minerals, mineral => status.hasMineral = status.hasMineral || mineral.mineralAmount > 0);
 
-        _.assign(Memory.rooms, {
-            [roomHash]: status
-        });
+        Memory.rooms[roomHash] = status;
 
         //console.log(`Room: ${roomHash} Controller: ${Game.rooms[roomHash].controller.progress}/${Game.rooms[roomHash].controller.progressTotal} | ${Game.rooms[roomHash].controller.progress/Game.rooms[roomHash].controller.progressTotal} `);        
     }
