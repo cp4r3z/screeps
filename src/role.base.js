@@ -15,7 +15,7 @@ module.exports = (creep, roomMemory) => {
                 }
             } else {
                 // Otherwise, harvest the energy from the nearest source
-                const closestSource = creep.pos.findClosestByPath(roomMemory.sourcesActive);
+                const closestSource = creep.pos.findClosestByPath(roomMemory.sources.active);
                 if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
                     utils.movement.toDest(creep, closestSource);
                 }
