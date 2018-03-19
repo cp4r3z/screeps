@@ -27,6 +27,7 @@ var roleHarvester = {
         }
 
         function pickupDroppedMinerals() {
+            
             const targets = creep.room.find(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType !== RESOURCE_ENERGY });
             if (targets.length) {
                 const target = creep.pos.findClosestByPath(targets);

@@ -63,7 +63,7 @@ var roleBuilder = {
                         }
             */
             let target;
-            if (roomMemory.areConstructionSites) {
+            if (roomMemory.constructionSites.are) {
                 // How to make this "repeating" into a function...
                 if (creep.memory.repeatUntil > Game.time) {
                     target = Game.getObjectById(creep.memory.targetID);

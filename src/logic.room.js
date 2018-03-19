@@ -86,9 +86,9 @@ module.exports = {
 
         status.repairTotal = _.reduce(status.structuresNeedingRepair, (result, structure) => { return 1e6 - structure.hits }, 0);
 
-        status.isUnderAttack = status.hostiles.length > 0;
-        status.areActiveSources = status.sourcesActive.length > 0;
-        status.areConstructionSites = status.constructionSites.length > 0;
+        status.hostiles.are = status.hostiles.length > 0;
+        status.sources.active.are = status.sources.active.length > 0;
+        status.constructionSites.are = status.constructionSites.length > 0;
         status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (20 * 1500); // Avg repair/tick * life of creep ?
         status.areTerminalsNotAtCapacity = status.terminals.withCapacity.length > 0;
 

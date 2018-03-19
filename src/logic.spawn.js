@@ -20,7 +20,7 @@ module.exports = (spawnName) => {
                 min: 1
             },
             builders: {
-                min: (roomMemory.areConstructionSites || roomMemory.repairNeeded) ? 1 : 0
+                min: (roomMemory.constructionSites.are || roomMemory.repairNeeded) ? 1 : 0
             },
             hunters: {
                 min: roomMemory.hostiles.length

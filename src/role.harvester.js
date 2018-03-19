@@ -27,6 +27,7 @@ var roleHarvester = {
         }
 
         function pickupDroppedEnergy() {
+            //TODO: Tombstones!
             const targets = creep.room.find(FIND_DROPPED_RESOURCES, { filter: resource => resource.resourceType == RESOURCE_ENERGY });
             if (targets.length) {
                 const target = creep.pos.findClosestByPath(targets);
@@ -42,7 +43,7 @@ var roleHarvester = {
             let source;
 
             function setNewSource() {
-                if (roomMemory.sources.active.length > 0) {
+                if (roomMemory.sources.active.are) {
                     source = creep.pos.findClosestByPath(roomMemory.sources.active);
                     creep.memory.sourceId = source.id;
                 }
