@@ -9,13 +9,12 @@ module.exports.loop = function() {
     Memory.DEBUG = false;
     //Memory.DEBUG = true;
 
+    if (Memory.DEBUG) console.log(`CPU Bucket: ${Game.cpu.bucket}`);
+    let cpuUsage = [{ step: '0', cpu: 0 }];
+
     // CPU Saver
 
-    if (Memory.DEBUG) console.log(`CPU Bucket: ${Game.cpu.bucket}`);
-
     if (Game.cpu.bucket < 100) return;
-
-    let cpuUsage = [{ step: '0', cpu: 0 }];
 
     // Only execute the callback every n ticks
     const intervalRun = function(runAgainInterval, memRoot, cb) {

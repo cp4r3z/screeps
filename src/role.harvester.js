@@ -42,8 +42,8 @@ var roleHarvester = {
             let source;
 
             function setNewSource() {
-                if (roomMemory.areActiveSources) {
-                    source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+                if (roomMemory.sources.active.length > 0) {
+                    source = creep.pos.findClosestByPath(roomMemory.sources.active);
                     creep.memory.sourceId = source.id;
                 }
             }
@@ -61,20 +61,25 @@ var roleHarvester = {
         if (creep.memory.harvesting) {
             if (!pickupDroppedEnergy()) {
                 // Check to see if there are active sources
-                if (roomMemory.areActiveSources) {
-                    harvestSources();
-                }
+                if (roomMemory.sources.active.length > 0) harvestSources();
             }
         } else {
-            // Start by filling extensions and spawns
-            let target = creep.pos.findClosestByPath(_.union(
-                roomMemory.spawns.needingEnergy,
-                roomMemory.extensions.needingEnergy
+            // Start by filling spawns
+            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: structure => structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity
+            });
+
+            // Then, if that's all done, fill other stuff
+
+            if (!target) target = creep.pos.findClosestByPath(_.union(
+                roomMemory.extensions.needingEnergy,
+                roomMemory.terminals.needingEnergy,
+                roomMemory.towers.needingEnergy
             ));
 
             // Then, if that's all done, fill other stuff
-            if (!target) target = creep.pos.findClosestByPath(roomMemory.terminals.needingEnergy);
-            if (!target) target = creep.pos.findClosestByPath(roomMemory.towers.needingEnergy);
+            //if (!target) target = creep.pos.findClosestByPath(roomMemory.terminals.needingEnergy);
+            //if (!target) target = creep.pos.findClosestByPath(roomMemory.towers.needingEnergy);
             if (!target) {
                 target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: (structure) => {

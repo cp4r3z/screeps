@@ -40,15 +40,18 @@ module.exports = {
             },
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
-            sources: Game.rooms[roomHash].find(FIND_SOURCES),
-            sourcesActive: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE),
+            sources: {
+                all: Game.rooms[roomHash].find(FIND_SOURCES),
+                active: Game.rooms[roomHash].find(FIND_SOURCES_ACTIVE)
+            },
+            // For some reason, saving a spawn in memory causes circular logic.
             spawns: {
-                all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                    filter: structure => structure.structureType == STRUCTURE_SPAWN
-                }),
-                needingEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
-                    filter: structure => structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity
-                })
+                // all: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                //     filter: structure => structure.structureType == STRUCTURE_SPAWN
+                // }),
+                // needingEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                //     filter: structure => structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity
+                // })
             },
             // WALLS aren't part of MY_STRUCTURES
             structuresNeedingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
