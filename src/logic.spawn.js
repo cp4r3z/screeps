@@ -10,11 +10,10 @@ module.exports = (spawnName) => {
     // all these need to get pushed into a config file. UGLY
     const SPAWN_PROPS = {
             harvesters: {
-                min: roomMemory.sources.length
+                min: roomMemory.sources.active.length
             },
             upgraders: {
-                min: 1
-                    //min: roomMemory.sources.length
+                min: roomMemory.sources.active.length
             },
             harvestersMineral: {
                 min: 1
@@ -85,18 +84,18 @@ module.exports = (spawnName) => {
 
         const isAtCapacity = totalEnergy >= totalCapacity * .5, // Yeah, this needs some help. This allows for a lesser creep to be built during hard times.
             isSpawning = spawn.spawning,
-            shouldSpawn = !isSpawning && (isWipedOut || roomMemory.isUnderAttack || isAtCapacity);
+            shouldSpawn = !isSpawning && (isWipedOut || roomMemory.hostiles.are || isAtCapacity);
 
         if (shouldSpawn) {
             let newName;
             // This Under Attack logic could produce non-ideal attackers.
-            if (roomMemory.isUnderAttack && killers.length < SPAWN_PROPS.hunters.min) {
+            if (roomMemory.hostiles.are && killers.length < SPAWN_PROPS.hunters.min) {
                 // Hey we're under attack. Yay.
 
                 //Game.notify(`UNDER ATTACK`);
                 newName = 'Killer' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
-            } else if (harvesters.length < SPAWN_PROPS.harvesters.min && roomMemory.areActiveSources) {
+            } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });

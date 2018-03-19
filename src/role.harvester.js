@@ -65,15 +65,18 @@ var roleHarvester = {
                 if (roomMemory.sources.active.length > 0) harvestSources();
             }
         } else {
-            // Start by filling spawns
-            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            let target;
+            
+            // Start by filling extensions
+            target = creep.pos.findClosestByPath(roomMemory.extensions.needingEnergy);
+
+            // Then spawns
+            if (!target) target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: structure => structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity
             });
 
             // Then, if that's all done, fill other stuff
-
             if (!target) target = creep.pos.findClosestByPath(_.union(
-                roomMemory.extensions.needingEnergy,
                 roomMemory.terminals.needingEnergy,
                 roomMemory.towers.needingEnergy
             ));
