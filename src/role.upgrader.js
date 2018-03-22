@@ -2,6 +2,7 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        if (creep.memory.role !== 'upgrader' || creep.memory.role !== 'harvester') return;
 
         // Get the room status from memory
         const roomMemory = Memory.rooms[creep.room.name];
