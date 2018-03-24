@@ -125,7 +125,7 @@ module.exports = (spawnName) => {
                 newName = 'HarvesterRemote' + Game.time;
                 //Oh, this is a mess. We need a more "global" plan.
                 if(spawn.room.name=='E12N47'){
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N46', home: spawn.room.name } });
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N47', home: spawn.room.name } });
                 } else{
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
                 }
