@@ -18,6 +18,9 @@ module.exports.loop = function() {
 
     // Only execute the callback every n ticks
     const intervalRun = function(runAgainInterval, memRoot, cb) {
+        if (!memRoot.runAgainAt) {
+            memRoot.runAgainAt = Game.time;
+        }
         if (Game.time >= memRoot.runAgainAt) {
             memRoot.runAgainAt = Game.time + runAgainInterval;
             cb();
@@ -45,7 +48,7 @@ module.exports.loop = function() {
 
     // SPAWNS
 
-    if (!Memory.spawns) Memory.logicSpawn = {};
+    if (!Memory.logicSpawn) Memory.logicSpawn = {};
 
     intervalRun(5, Memory.logicSpawn, function() {
         const logicSpawn = require('./logic.spawn');
@@ -91,7 +94,7 @@ module.exports.loop = function() {
 
     // MARKET
 
-    if (!Memory.market) Memory.logicMarket = {};
+    if (!Memory.logicMarket) Memory.logicMarket = {};
 
     intervalRun(50, Memory.logicMarket, function() {
         const logicMarket = require('./logic.market');
