@@ -45,13 +45,17 @@ module.exports.loop = function() {
 
     // SPAWNS
 
-    const logicSpawn = require('./logic.spawn');
+    if (!Memory.spawns) Memory.logicSpawn = {};
 
-    for (const spawn in Game.spawns) {
-        logicSpawn(spawn);
-    }
+    intervalRun(5, Memory.logicSpawn, function() {
+        const logicSpawn = require('./logic.spawn');
 
-    if (Memory.DEBUG) cpuUsage.push({ step: 'Spawn Logic', cpu: Game.cpu.getUsed() });
+        for (const spawn in Game.spawns) {
+            logicSpawn(spawn);
+        }
+
+        if (Memory.DEBUG) cpuUsage.push({ step: 'Spawn Logic', cpu: Game.cpu.getUsed() });
+    });
 
     // CREEPS
 
@@ -87,9 +91,9 @@ module.exports.loop = function() {
 
     // MARKET
 
-    if (!Memory.market) Memory.market = {};
+    if (!Memory.market) Memory.logicMarket = {};
 
-    intervalRun(50, Memory.market, function() {
+    intervalRun(50, Memory.logicMarket, function() {
         const logicMarket = require('./logic.market');
 
         logicMarket();
