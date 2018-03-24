@@ -120,9 +120,16 @@ module.exports = (spawnName) => {
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47' && Game.cpu.bucket > 5000) {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
+                //would be nice to reserve other rooms too.
             } else if (remoteHarvesters.length <= 3 && isAtCapacity && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterRemote' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
+                //Oh, this is a mess. We need a more "global" plan.
+                if(spawn.room.name=='E12N47'){
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N46', home: spawn.room.name } });
+                } else{
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
+                }
+                
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
