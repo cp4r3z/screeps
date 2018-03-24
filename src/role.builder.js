@@ -97,7 +97,7 @@ var roleBuilder = {
                     base.utils.movement.toDest(creep, target);
                     //console.log(`Moving to construction site.`);
                 }
-            } else if (roomMemory.towers.needingEnergy > 0) {
+            } else if (roomMemory.towers.needingEnergy.length > 0) {
                 let target = creep.pos.findClosestByPath(roomMemory.towers.needingEnergy);
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
