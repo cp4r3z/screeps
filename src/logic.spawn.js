@@ -104,16 +104,11 @@ module.exports = (spawnName) => {
                 newName = 'Upgrader' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
 
-            } else if (builders.length < SPAWN_PROPS.builders.min) {
-                newName = 'Builder' + Game.time;
-                if (roomMemory.constructionSites.length === 0) {
-                    // No urgent construction
-                    if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
-                        spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
-                    }
-                } else {
+            } else if (builders.length < SPAWN_PROPS.builders.min && roomMemory.constructionSites.length > 0) {
+                newName = `B_${spawn.room.name}_${Game.time.slice(-4)}`;
+                if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
-                }
+                }                
             } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterMineral' + Game.time;
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
