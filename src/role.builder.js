@@ -78,9 +78,12 @@ var roleBuilder = {
                     //console.log(`Moving to construction site.`);
                 }
             } else if (roomMemory.structuresNeedingRepair.length > 0) {
-                // Choose Target
+                // Choose Target --- I feel like this needs some cleanup.
                 if (creep.memory.repeatUntil > Game.time && creep.memory.targetID) {
                     target = Game.getObjectById(creep.memory.targetID);
+                    if (!target) {
+                        target = nextStructureNeedingRepair();
+                    }
                     if (target.hits == target.hitsMax) {
                         target = nextStructureNeedingRepair();
                     }
