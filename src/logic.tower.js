@@ -3,11 +3,11 @@ module.exports = (tower) => {
         // Get the room status from memory
         const roomStatus = Memory.rooms[tower.room.name];
 
-        if (roomStatus.isUnderAttack) {
+        if (roomStatus.hostiles.are) {
             const closestHostile = tower.pos.findClosestByRange(roomStatus.hostiles);
             tower.attack(closestHostile);
         } else {
-            if (tower.energy > 100) {
+            if (tower.energy > 250) {
                 const closestDamagedStructure = tower.pos.findClosestByRange(roomStatus.structuresNeedingRepair);
                 if (closestDamagedStructure) {
                     tower.repair(closestDamagedStructure);

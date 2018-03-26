@@ -107,7 +107,7 @@ var roleBuilder = {
             } else {
                 //Nothing to do nowhere to go? Go harvest something.
                 creep.say('bored');
-                roleHarvester.run(creep);
+                roleHarvester.run(creep); // This causes the builder to "bounce" between depositing into storage and taking out. Rethink!
             }
         } else {
             base.getEnergy();

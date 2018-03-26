@@ -94,7 +94,9 @@ module.exports = (spawnName) => {
 
                 //Game.notify(`UNDER ATTACK`);
                 newName = 'Killer' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } });
+                if (spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } }) !== OK) {
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'killer' } });
+                }
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
                 newName = 'Harvester' + Game.time;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
@@ -108,10 +110,10 @@ module.exports = (spawnName) => {
                 newName = `B_${spawn.room.name}_${Game.time.slice(-4)}`;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
-                }                
+                }
             } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterMineral' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
+                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47' && Game.cpu.bucket > 5000) {
                 newName = 'ScoutReserver' + Game.time;
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
@@ -119,12 +121,12 @@ module.exports = (spawnName) => {
             } else if (remoteHarvesters.length <= 3 && isAtCapacity && Game.cpu.bucket > 5000) {
                 newName = 'HarvesterRemote' + Game.time;
                 //Oh, this is a mess. We need a more "global" plan.
-                if(spawn.room.name=='E12N47'){
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N47', home: spawn.room.name } });
-                } else{
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy/2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
+                if (spawn.room.name == 'E12N47') {
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N47', home: spawn.room.name } });
+                } else {
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
                 }
-                
+
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
