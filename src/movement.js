@@ -26,7 +26,7 @@ module.exports = {
         };
 
         const retVal = creep.moveTo(dest, opts);
-        if (retVal != OK && retVal != ERR_TIRED) {
+        if (retVal != OK && retVal != ERR_TIRED && retVal != ERR_BUSY) {
             console.log(`creep ${creep.name} | moveTo err: ${retVal}`);
         }
     }
