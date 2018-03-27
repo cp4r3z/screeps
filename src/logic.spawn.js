@@ -32,8 +32,8 @@ module.exports = (spawnName) => {
                 slow_worker: { m: 1, w: 1, c: 1 },
                 killer: { m: 2, t: 1, a: 1 },
                 killer2: { m: 2, t: 1, r: 1 },
+                scout: { c, m }
             }
-
         };
 
     const spawnEnergy = spawn.energy,
@@ -86,51 +86,80 @@ module.exports = (spawnName) => {
             isSpawning = spawn.spawning,
             shouldSpawn = !isSpawning && (isWipedOut || roomMemory.hostiles.are || isAtCapacity);
 
+        const spawnCreep = function(options) {
+
+            // Default values
+            const partsIdeal = options.partsIdeal || CREEP_PROPS.parts.slow_worker,
+                partsBackup = options.partsBackup || CREEP_PROPS.parts.worker,
+                energy = options.energy || totalEnergy,
+                name = `${options.namePrefix}_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
+
+            if (spawn.spawnCreep(utils.creep.parts.getCreepDesc(energy, partsIdeal).list, name, { memory: { role: options.role, dest: options.dest, home: options.home } }) !== OK) {
+                let retVal;
+                retVal = spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, partsBackup).list, name, { memory: { role: options.role, dest: options.dest, home: options.home } });
+                if (retVal != OK) {
+                    console.log(`spawn ${spawn.name} | Return Value: ${retVal}`);
+                }
+            }
+        };
+
         if (shouldSpawn) {
-            let newName;
-            // This Under Attack logic could produce non-ideal attackers.
+            let options;
             if (roomMemory.hostiles.are && killers.length < SPAWN_PROPS.hunters.min) {
                 // Hey we're under attack. Yay.
-
-                //Game.notify(`UNDER ATTACK`);
-                newName = 'Killer' + Game.time;
-                if (spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer2).list, newName, { memory: { role: 'killer' } }) !== OK) {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'killer' } });
-                }
+                options = {
+                    namePrefix: 'K',
+                    role: 'killer',
+                    partsIdeal: CREEP_PROPS.parts.killer2,
+                    partsBackup: CREEP_PROPS.parts.killer
+                };
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
-                newName = `H_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
-                if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
-                }
+                options = {
+                    namePrefix: 'H',
+                    role: 'harvester'
+                };
             } else if (upgraders.length < SPAWN_PROPS.upgraders.min) {
-                newName = 'Upgrader' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
-
+                options = {
+                    namePrefix: 'U',
+                    role: 'upgrader'
+                };
             } else if (builders.length < SPAWN_PROPS.builders.min && roomMemory.constructionSites.length > 0) {
-                newName = `B_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
-                if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
-                }
+                options = {
+                    namePrefix: 'B',
+                    role: 'builder',
+                    energy: totalEnergy / 2
+                };
             } else if (harvestersMineral.length < minHarvestersMineral && roomMemory.hasMineral && Game.cpu.bucket > 5000) {
-                newName = 'HarvesterMineral' + Game.time;
-                spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'harvesterMineral' } });
+                options = {
+                    namePrefix: 'HM',
+                    role: 'harvesterMineral',
+                    energy: totalEnergy / 2
+                };
             } else if (scoutReservers.length < 1 && spawn.room.name == 'E12N47' && Game.cpu.bucket > 5000) {
-                newName = 'ScoutReserver' + Game.time;
-                spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
+                options = {
+                    namePrefix: 'SR',
+                    role: 'scoutReserver',
+                    dest: 'E12N46',
+                    partsIdeal: CREEP_PROPS.parts.scout,
+                    partsBackup: CREEP_PROPS.parts.scout,
+                    energy: 1300
+                };
                 //would be nice to reserve other rooms too.
             } else if (remoteHarvesters.length <= 3 && isAtCapacity && Game.cpu.bucket > 5000) {
-                newName = `HR_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
                 //Oh, this is a mess. We need a more "global" plan.
-                if (spawn.room.name == 'E12N47') {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N48', home: spawn.room.name } });
-                } else {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
-                }
-
+                options = {
+                    namePrefix: 'HR',
+                    role: 'harvesterRemote',
+                    dest: 'E12N46',
+                    home: spawn.room.name,
+                    energy: totalEnergy / 2
+                };
+                if (spawn.room.name == 'E12N47') options.dest = 'E12N48';
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
             }
+            if (options) spawnCreep(options);
         }
     }
 };
