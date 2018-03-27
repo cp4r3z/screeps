@@ -98,7 +98,7 @@ module.exports = (spawnName) => {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.killer).list, newName, { memory: { role: 'killer' } });
                 }
             } else if (harvesters.length < SPAWN_PROPS.harvesters.min) {
-                newName = 'Harvester' + Game.time;
+                newName = `H_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxHarvester().list, newName, { memory: { role: 'harvester' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvester' } });
                 }
@@ -107,7 +107,7 @@ module.exports = (spawnName) => {
                 spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.slow_worker).list, newName, { memory: { role: 'upgrader' } });
 
             } else if (builders.length < SPAWN_PROPS.builders.min && roomMemory.constructionSites.length > 0) {
-                newName = `B_${spawn.room.name}_${Game.time.slice(-4)}`;
+                newName = `B_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
                 if (spawn.spawnCreep(utils.creep.parts.getMaxBuilder().list, newName, { memory: { role: 'builder' } }) !== OK) {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'builder' } });
                 }
@@ -119,10 +119,10 @@ module.exports = (spawnName) => {
                 spawn.spawnCreep([CLAIM, MOVE, CLAIM, MOVE], newName, { memory: { role: 'scoutReserver', dest: 'E12N46' } });
                 //would be nice to reserve other rooms too.
             } else if (remoteHarvesters.length <= 3 && isAtCapacity && Game.cpu.bucket > 5000) {
-                newName = 'HarvesterRemote' + Game.time;
+                newName = `HR_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
                 //Oh, this is a mess. We need a more "global" plan.
                 if (spawn.room.name == 'E12N47') {
-                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E11N47', home: spawn.room.name } });
+                    spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N48', home: spawn.room.name } });
                 } else {
                     spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy / 2, CREEP_PROPS.parts.worker).list, newName, { memory: { role: 'harvesterRemote', dest: 'E12N46', home: spawn.room.name } });
                 }

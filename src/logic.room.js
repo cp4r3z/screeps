@@ -53,6 +53,21 @@ module.exports = {
                 //     filter: structure => structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity
                 // })
             },
+            structures: {
+                all: {
+                    needingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
+                        filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
+                    }).sort((a, b) => a.hits - b.hits)
+                },
+                hostile: {
+                    all: {
+
+                    },
+                    withEnergy: Game.rooms[roomHash].find(FIND_HOSTILE_STRUCTURES, {
+                        filter: structure => structure.store[RESOURCE_ENERGY] > 0
+                    })
+                }
+            },
             // WALLS aren't part of MY_STRUCTURES
             structuresNeedingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
                 filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
@@ -89,6 +104,7 @@ module.exports = {
         status.hostiles.are = status.hostiles.length > 0;
         status.sources.active.are = status.sources.active.length > 0;
         status.constructionSites.are = status.constructionSites.length > 0;
+        status.structures.hostile.withEnergy.are = status.structures.hostile.withEnergy.length > 0;
         status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (20 * 1500); // Avg repair/tick * life of creep ?
         status.areTerminalsNotAtCapacity = status.terminals.withCapacity.length > 0;
 

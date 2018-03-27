@@ -6,6 +6,7 @@ module.exports = (tower) => {
         if (roomStatus.hostiles.are) {
             const closestHostile = tower.pos.findClosestByRange(roomStatus.hostiles);
             tower.attack(closestHostile);
+            //TODO: Attack the work and attack parts first
         } else {
             if (tower.energy > 250) {
                 const closestDamagedStructure = tower.pos.findClosestByRange(roomStatus.structuresNeedingRepair);
