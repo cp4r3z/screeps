@@ -32,7 +32,7 @@ module.exports = (spawnName) => {
                 slow_worker: { m: 1, w: 1, c: 1 },
                 killer: { m: 2, t: 1, a: 1 },
                 killer2: { m: 2, t: 1, r: 1 },
-                scout: { c, m }
+                scout: { c:1, m:1 }
             }
         };
 

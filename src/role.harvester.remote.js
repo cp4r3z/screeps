@@ -20,8 +20,8 @@ module.exports = {
         if (creep.memory.harvesting) {
             if (creep.room.name == creep.memory.dest) {
                 // Creep is in the remote room. Harvest!
-                if (roomMemory.structures.hostile.withEnergy.are) {
-                    const target = roomMemory.structures.hostile.withEnergy[0];
+                if (roomMemory.extensions.hostile.withEnergy.are) {
+                    const target = roomMemory.extensions.hostile.withEnergy[0];
                     if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         base.utils.movement.toDest(creep, target, 50);
                     }

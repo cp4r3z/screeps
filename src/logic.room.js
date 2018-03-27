@@ -36,7 +36,13 @@ module.exports = {
                 }),
                 needingEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
                     filter: structure => structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity
-                })
+                }),
+                hostile: {
+                    all: {},
+                    withEnergy: Game.rooms[roomHash].find(FIND_HOSTILE_STRUCTURES, {
+                        filter: structure => structure.energy > 0
+                    })
+                }
             },
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
@@ -58,14 +64,6 @@ module.exports = {
                     needingRepair: Game.rooms[roomHash].find(FIND_STRUCTURES, {
                         filter: object => object.hits < object.hitsMax && object.hits < 1e6 // arbitrary "max"
                     }).sort((a, b) => a.hits - b.hits)
-                },
-                hostile: {
-                    all: {
-
-                    },
-                    withEnergy: Game.rooms[roomHash].find(FIND_HOSTILE_STRUCTURES, {
-                        filter: structure => structure.store[RESOURCE_ENERGY] > 0
-                    })
                 }
             },
             // WALLS aren't part of MY_STRUCTURES
