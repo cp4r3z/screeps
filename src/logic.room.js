@@ -102,7 +102,7 @@ module.exports = {
         status.hostiles.are = status.hostiles.length > 0;
         status.sources.active.are = status.sources.active.length > 0;
         status.constructionSites.are = status.constructionSites.length > 0;
-        status.structures.hostile.withEnergy.are = status.structures.hostile.withEnergy.length > 0;
+        status.extensions.hostile.withEnergy.are = status.extensions.hostile.withEnergy.length > 0;
         status.repairNeeded = status.structuresNeedingRepair.length > 0 && status.repairTotal > (20 * 1500); // Avg repair/tick * life of creep ?
         status.areTerminalsNotAtCapacity = status.terminals.withCapacity.length > 0;
 
