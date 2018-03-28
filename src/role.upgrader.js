@@ -19,24 +19,31 @@ var roleUpgrader = {
             const target = _.filter(roomMemory.terminals.all, terminal => terminal.store[mineralNeeded] > 0)[0];
 
             const total = _.sum(creep.carry);
+            let retVal;
+
             if (target && total < creep.carryCapacity) {
                 //withdraw
 
-                if (creep.withdraw(target, mineralNeeded) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, target);
-                    return 0;
-                }
+                retVal = creep.withdraw(target, mineralNeeded);
+                if (retVal == ERR_NOT_IN_RANGE) {
+                    retVal = base.utils.movement.toDest(creep, target);
+                    return retVal;
+                } else return retVal;
+
             } else {
-                //transfer
+                
+                // See if there are any labs to transfer to
                 const lab = _.filter(roomMemory.labs.all, lab => {
                     return (lab.mineralType == mineralNeeded || lab.mineralType === undefined) && lab.mineralAmount <= lab.mineralCapacity;
                 })[0];
                 if (!lab) return 1;
-                if (creep.transfer(lab, mineralNeeded) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, lab, 20);
-                    //exit the each?
-                    return 0;
-                }
+                
+                //transfer
+                retVal = creep.transfer(lab, mineralNeeded);
+                if (retVal == ERR_NOT_IN_RANGE) {
+                    retVal = base.utils.movement.toDest(creep, lab, 20);
+                    return retVal;
+                } else return retVal;
             }
         };
 
@@ -45,9 +52,7 @@ var roleUpgrader = {
             if (retVal == ERR_NOT_IN_RANGE) {
                 retVal = base.utils.movement.toDest(creep, creep.room.controller, 20);
                 return retVal;
-            } else {
-                return retVal;
-            }
+            } else return retVal;
         };
 
         // Returns 0 if it was boosted. Returns something else if not.
