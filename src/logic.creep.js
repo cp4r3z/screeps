@@ -1,29 +1,49 @@
-const role = {
-    harvester: require('./role.harvester'),
-    harvesterMineral: require('./role.harvester.mineral'),
-    harvesterRemote: require('./role.harvester.remote'),
-    upgrader: require('./role.upgrader'),
-    builder: require('./role.builder'),
-    builderSpawn: require('./role.builder.spawn'),
-    scout: require('./role.scout'),
-    scoutReserver: require('./role.scout.reserver'),
-    killer: require('./role.killer')
-};
-
 module.exports = () => {
-    const rolesByRank = [
-        'killer',
-        'harvester',
-        'upgrader',
-        'builder',
-        'builderSpawn',
-        'harvesterMineral',
-        'harvesterRemote',
-        'scout',
-        'scoutReserver'
+    const rolesByRank = [{
+            role: 'killer',
+            path: './role.killer'
+        },
+        {
+            role: 'harvester',
+            path: './role.harvester'
+        },
+        {
+            role: 'upgrader',
+            path: './role.upgrader'
+        },
+        {
+            role: 'builder',
+            path: './role.builder'
+        },
+        {
+            role: 'builderSpawn',
+            path: './role.builder.spawn'
+        },
+        {
+            role: 'harvesterMineral',
+            path: './role.harvester.mineral'
+        },
+        {
+            role: 'harvesterRemote',
+            path: './role.harvester.remote'
+        },
+        {
+            role: 'scout',
+            path: './role.scout'
+        },
+        {
+            role: 'scoutReserver',
+            path: './role.scout.reserver'
+        }
     ];
 
-    const creepsRanked = _.sortBy(Game.creeps, [(creep) => rolesByRank.indexOf(Game.creeps[creep].memory.role)]);
+    const creepsRanked = _.sortBy(Game.creeps, [creep => _.findIndex(rolesByRank, 'role', Game.creeps[creep].memory.role)]);
 
-    _.forEach(creepsRanked, (creep) => { if (Game.cpu.getUsed() < Game.cpu.tickLimit) role[creep.memory.role].run(creep); });
+    _.forEach(creepsRanked, (creep) => {
+        if (Game.cpu.getUsed() < 10) { //Use Game.cpu.limit instead of 10 if you ever pay.
+            const path = _.result(_.find(rolesByRank, 'role', creep.memory.role), 'path');
+            const role = require(path);
+            role.run(creep);
+        }
+    });
 };
