@@ -45,6 +45,11 @@ module.exports = {
                 }
             },
             hostiles: Game.rooms[roomHash].find(FIND_HOSTILE_CREEPS),
+            labs: {
+                all:Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                    filter: structure => structure.structureType == STRUCTURE_LAB
+                })
+            },
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
             sources: {
                 all: Game.rooms[roomHash].find(FIND_SOURCES),

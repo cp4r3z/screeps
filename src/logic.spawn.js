@@ -32,7 +32,7 @@ module.exports = (spawnName) => {
                 slow_worker: { m: 1, w: 1, c: 1 },
                 killer: { m: 2, t: 1, a: 1 },
                 killer2: { m: 2, t: 1, r: 1 },
-                scout: { cl:1, m:1 }
+                scout: { cl: 1, m: 1 }
             }
         };
 
@@ -94,9 +94,15 @@ module.exports = (spawnName) => {
                 energy = options.energy || totalEnergy,
                 name = `${options.namePrefix}_${spawn.room.name}_${Game.time.toString().slice(-4)}`;
 
-            if (spawn.spawnCreep(utils.creep.parts.getCreepDesc(energy, partsIdeal).list, name, { memory: { role: options.role, dest: options.dest, home: options.home } }) !== OK) {
+            let partsList = utils.creep.parts.getCreepDesc(energy, partsIdeal).list;
+
+            if (options.role == 'scoutReserver') {
+                partsList = [CLAIM, MOVE, CLAIM, MOVE]
+            }
+            if (spawn.spawnCreep(partsList, name, { memory: { role: options.role, dest: options.dest, home: options.home } }) !== OK) {
+                partsList = utils.creep.parts.getCreepDesc(totalEnergy, partsBackup).list;
                 let retVal;
-                retVal = spawn.spawnCreep(utils.creep.parts.getCreepDesc(totalEnergy, partsBackup).list, name, { memory: { role: options.role, dest: options.dest, home: options.home } });
+                retVal = spawn.spawnCreep(partsList, name, { memory: { role: options.role, dest: options.dest, home: options.home } });
                 if (retVal != OK) {
                     console.log(`spawn ${spawn.name} | Return Value: ${retVal}`);
                 }
@@ -154,7 +160,7 @@ module.exports = (spawnName) => {
                     home: spawn.room.name,
                     energy: totalEnergy / 2
                 };
-                if (spawn.room.name == 'E12N47') options.dest = 'E12N48';
+                //if (spawn.room.name == 'E12N47') options.dest = 'E12N48';
             } else {
                 //console.log('What a waste.');
                 //Some idea... maybe if this happens, we let harvesters withdraw from the nearest extension?
