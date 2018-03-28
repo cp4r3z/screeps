@@ -24,6 +24,7 @@ var roleUpgrader = {
 
                 if (creep.withdraw(target, mineralNeeded) == ERR_NOT_IN_RANGE) {
                     base.utils.movement.toDest(creep, target);
+                    return 0;
                 }
             } else {
                 //transfer
@@ -31,10 +32,44 @@ var roleUpgrader = {
                     return (lab.mineralType == mineralNeeded || lab.mineralType === undefined) && lab.mineralAmount <= lab.mineralCapacity;
                 })[0];
                 if (!lab) return 1;
-                if (creep.transfer(target, mineralNeeded) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, target, 20);
+                if (creep.transfer(lab, mineralNeeded) == ERR_NOT_IN_RANGE) {
+                    base.utils.movement.toDest(creep, lab, 20);
                     //exit the each?
                     return 0;
+                }
+            }
+        };
+
+        const upgrade = function() {
+            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                base.utils.movement.toDest(creep, creep.room.controller, 20);
+            }
+        };
+
+        // Returns 0 if it was boosted. Returns something else if not.
+        const boost = function() {
+            let canBoost = false,
+                lab,
+                isFullyBoosted = true;
+
+            _.forEach(creep.body, part => { if (!part.boost) isFullyBoosted = false; });
+
+            if (isFullyBoosted) { return 1; } else {
+                lab = _.filter(roomMemory.labs.all, lab => {
+                    return lab.mineralType == mineralNeeded &&
+                        lab.mineralAmount > 20 && lab.energy > 20;
+                });
+                canBoost = lab.length > 0;
+                lab = lab[0];
+            }
+
+            if (!canBoost) { return 1; } else {
+                if (Memory.DEBUG) console.log(`${creep.name} can be boosted with ${mineralNeeded}!`);
+                const retVal = lab.boostCreep(creep);
+                if (retVal == ERR_NOT_IN_RANGE) {
+                    base.utils.movement.toDest(creep, lab, 20);
+                } else if (retVal !== OK) {
+                    return retVal;
                 }
             }
         };
@@ -52,37 +87,13 @@ var roleUpgrader = {
         // or just go straight for the good stuff. RESOURCE_CATALYZED_GHODIUM_ACID
 
         if (creep.memory.upgrading) {
-
-            let canBoost = false,
-                lab,
-                isFullyBoosted = true;
-
-            _.forEach(creep.body, part => { if (!part.boost) isFullyBoosted = false; });
-
-            if (!isFullyBoosted) {
-                lab = _.filter(roomMemory.labs.all, lab => { 
-                    return lab.mineralType == mineralNeeded && lab.mineralAmount > 0 && lab.energy > 0; 
-                });
-                canBoost = lab.length > 0;
-                lab = lab[0];
-            }
-
-            if (canBoost) {
-                if (Memory.DEBUG) console.log(`${creep.name} can be boosted with ${mineralNeeded}!`);
-                if (lab.boostCreep(creep) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, lab, 20);
-                }
-            } else {
-                if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    base.utils.movement.toDest(creep, creep.room.controller, 20);
-                }
-            }
-
+            upgrade();
         } else {
-            //ew
-            if (moveMinerals(mineralNeeded) !== 0) {
-                base.getEnergy();
-            }
+            let retVal;
+            retVal = moveMinerals(mineralNeeded);
+            // There's probably some shortcut for this pattern
+            if (retVal !==0) retVal = boost();
+            if (retVal !==0) retVal = base.getEnergy();
         }
     }
 };
