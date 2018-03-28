@@ -41,8 +41,12 @@ var roleUpgrader = {
         };
 
         const upgrade = function() {
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                base.utils.movement.toDest(creep, creep.room.controller, 20);
+            let retVal = creep.upgradeController(creep.room.controller);
+            if (retVal == ERR_NOT_IN_RANGE) {
+                retVal = base.utils.movement.toDest(creep, creep.room.controller, 20);
+                return retVal;
+            } else {
+                return retVal;
             }
         };
 
@@ -92,8 +96,8 @@ var roleUpgrader = {
             let retVal;
             retVal = moveMinerals(mineralNeeded);
             // There's probably some shortcut for this pattern
-            if (retVal !==0) retVal = boost();
-            if (retVal !==0) retVal = base.getEnergy();
+            if (retVal !== 0) retVal = boost();
+            if (retVal !== 0) retVal = base.getEnergy();
         }
     }
 };
