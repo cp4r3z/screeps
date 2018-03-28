@@ -48,7 +48,10 @@ module.exports = {
             labs: {
                 all:Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
                     filter: structure => structure.structureType == STRUCTURE_LAB
-                })
+                }),
+                needingEnergy: Game.rooms[roomHash].find(FIND_MY_STRUCTURES, {
+                    filter: structure => structure.structureType == STRUCTURE_LAB && structure.energy < structure.energyCapacity
+                }),
             },
             minerals: Game.rooms[roomHash].find(FIND_MINERALS),
             sources: {

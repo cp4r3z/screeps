@@ -77,6 +77,7 @@ var roleHarvester = {
 
             // Then, if that's all done, fill other stuff
             if (!target) target = creep.pos.findClosestByPath(_.union(
+                roomMemory.labs.needingEnergy,
                 roomMemory.terminals.needingEnergy,
                 roomMemory.towers.needingEnergy
             ));
